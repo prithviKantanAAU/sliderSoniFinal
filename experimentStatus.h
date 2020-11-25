@@ -4,6 +4,7 @@ class ExperimentControl
 {
 public:
 
+	// Session Indices: 1: FAST // 2: PRECISE // 3: MIN OVERSHOOTS
 	short session_Total = 3;
 	short session_CurrentIdx = 0;
 	short session_Completed = 0;
@@ -38,4 +39,16 @@ public:
 	void concludeTrial()
 	{
 	}
+
+	// UI Status
+	//  0: Pre Expt Start Screen
+	//  1: Personal Details Screen
+	//  2: Session Intro Screen
+	//  3: Block Intro/Instruction Screen
+	//  4: Training Screen
+	//  5: Trial Screen
+	//  6: Subjective Data Screen
+	//  7: Conclusion Screen
+
+	int idx_Screen = 0;
 };

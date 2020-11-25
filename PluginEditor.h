@@ -1,22 +1,10 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "UIStrings.h"
 
-//==============================================================================
-/**
-*/
-class SliderSonificationFinalAudioProcessorEditor  : public AudioProcessorEditor
+class SliderSonificationFinalAudioProcessorEditor  : public AudioProcessorEditor, public Timer
 {
 public:
     SliderSonificationFinalAudioProcessorEditor (SliderSonificationFinalAudioProcessor&);
@@ -27,9 +15,25 @@ public:
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
     SliderSonificationFinalAudioProcessor& processor;
+	void configureUI_Initial();
+	void getNextScreenIdx();
+	void toggleScreen(short newScreenIdx);
+	void timerCallback();
+
+	// Time Monitoring
+	Label timeElapsed_Total;
+	Label timeLeft_Task;
+
+	// Experiment Monitoring
+	Label session_Present;
+	Label block_Present;
+	Label trial_Present;
+
+	// Data Collection
+	Slider task;
+	Slider pleasantness;
+	Slider longevity;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SliderSonificationFinalAudioProcessorEditor)
 };

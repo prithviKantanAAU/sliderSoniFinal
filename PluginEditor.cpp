@@ -1,30 +1,34 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-//==============================================================================
 SliderSonificationFinalAudioProcessorEditor::SliderSonificationFinalAudioProcessorEditor (SliderSonificationFinalAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setSize (1200, 400);
+	startTimerHz(50);
+	configureUI_Initial();
 }
 
 SliderSonificationFinalAudioProcessorEditor::~SliderSonificationFinalAudioProcessorEditor()
 {
 }
 
-//==============================================================================
+void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
+{
+}
+
+void SliderSonificationFinalAudioProcessorEditor::timerCallback()
+{
+}
+
+void SliderSonificationFinalAudioProcessorEditor::getNextScreenIdx()
+{
+}
+
+void SliderSonificationFinalAudioProcessorEditor::toggleScreen(short newScreenIdx)
+{
+}
+
 void SliderSonificationFinalAudioProcessorEditor::paint (Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
@@ -32,11 +36,9 @@ void SliderSonificationFinalAudioProcessorEditor::paint (Graphics& g)
 
     g.setColour (Colours::white);
     g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), Justification::centred, 1);
 }
 
 void SliderSonificationFinalAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    
 }
