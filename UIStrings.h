@@ -60,10 +60,10 @@ public:
 		"Press SPACE to proceed.",
 		"Press SPACE to begin the session.",
 		"Press SPACE to begin the training phase.",
-		"Press SPACE to ",
-		"",
-		"",
-		""
+		"Press SPACE to begin the testing phase.",
+		"Press SPACE when you have located the target.",
+		"Press SPACE to proceed.",
+		"Press SPACE to conclude the experiment."
 	};
 
 
