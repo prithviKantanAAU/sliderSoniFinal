@@ -16,6 +16,18 @@ public:
 	short trial_Total = 4;
 	short trial_Current = 0;
 
+	double timeElapsed_SEC_FLOAT = 0;
+	int timeElapsed_MIN = 0;
+	int timeElapsed_SEC = 0;
+
+	void updateTimeVariables(double incrementSec)
+	{
+		timeElapsed_SEC_FLOAT += incrementSec;
+		int seconds_Int = (int)timeElapsed_SEC_FLOAT;
+		timeElapsed_MIN = seconds_Int / 60;
+		timeElapsed_SEC = seconds_Int % 60;
+	}
+
 	void beginSession()
 	{
 	}

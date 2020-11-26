@@ -2,7 +2,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "experimentStatus.h"
 
-class SliderSonificationFinalAudioProcessor  : public AudioProcessor
+class SliderSonificationFinalAudioProcessor  : public AudioProcessor, public HighResolutionTimer
 {
 public:
     
@@ -29,7 +29,7 @@ public:
     void changeProgramName (int index, const String& newName) override;
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-
+	void hiResTimerCallback();
 	ExperimentControl experimentControl;
 
 private:

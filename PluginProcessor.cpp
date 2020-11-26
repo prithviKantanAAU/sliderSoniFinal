@@ -24,13 +24,19 @@ SliderSonificationFinalAudioProcessor::SliderSonificationFinalAudioProcessor()
                        )
 #endif
 {
+	startTimer(1);
 }
 
 SliderSonificationFinalAudioProcessor::~SliderSonificationFinalAudioProcessor()
 {
+	stopTimer();
 }
 
-//==============================================================================
+void SliderSonificationFinalAudioProcessor::hiResTimerCallback()
+{
+	experimentControl.updateTimeVariables(0.001);
+}
+
 const String SliderSonificationFinalAudioProcessor::getName() const
 {
     return JucePlugin_Name;
