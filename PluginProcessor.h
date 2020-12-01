@@ -32,6 +32,11 @@ public:
 	void hiResTimerCallback();
 	ExperimentControl experimentControl;
 
+	KeyPress spaceBarContinue;
+	bool isSpaceDown = false;
+	bool wasSpaceDown = false;
+	void handleProceed();
+
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SliderSonificationFinalAudioProcessor)
 };

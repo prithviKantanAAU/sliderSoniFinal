@@ -1,17 +1,6 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-//==============================================================================
 SliderSonificationFinalAudioProcessor::SliderSonificationFinalAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
@@ -35,7 +24,47 @@ SliderSonificationFinalAudioProcessor::~SliderSonificationFinalAudioProcessor()
 void SliderSonificationFinalAudioProcessor::hiResTimerCallback()
 {
 	experimentControl.updateTimeVariables(0.001);
+
+	// CHECK FOR SPACE KEY PRESSES
+	isSpaceDown = spaceBarContinue.isKeyCurrentlyDown(KeyPress::spaceKey);
+	if (isSpaceDown && !wasSpaceDown) handleProceed();
+	wasSpaceDown = isSpaceDown;
 }
+
+void SliderSonificationFinalAudioProcessor::handleProceed()
+{
+	int scr = experimentControl.idx_Screen;
+	int sess = experimentControl.session_Completed;
+	int blk = experimentControl.block_Completed;
+	int trial = experimentControl.trial_Current;
+	bool isAllOK = false;
+
+	switch (scr)
+	{
+	case 0:				// WELCOME SCREEN
+		isAllOK = true;
+		if (isAllOK) experimentControl.idx_Screen = 1;
+		break;
+	case 1:				// PARTICIPANT DETAILS SCREEN
+		isAllOK = true; /////////////////////////////////////////////////
+		if (isAllOK) experimentControl.idx_Screen = 2;
+		break;
+	case 2:				// SESSION INTRO SCREEN
+		isAllOK = true;
+ 		if (isAllOK) experimentControl.idx_Screen = 3;
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+	case 6:
+		break;
+	case 7:
+		break;
+	}
+};
 
 const String SliderSonificationFinalAudioProcessor::getName() const
 {

@@ -5,6 +5,18 @@ class UIStrings
 {
 public:
 	
+	String screenHeaders[8] =
+	{
+		"Introduction",
+		"Participant Details",
+		"Goal of Session",
+		"Goal of Block",
+		"Training Phase",
+		"Testing Phase",
+		"Subjective Ratings",
+		"End of Experiment"
+	};
+
 	String welcomeText =
 	"Welcome. Your task is to find a point on a horizontal line" 
 		" using different audio guidance types. \n \n" "Next, you will be asked to rate their "
@@ -101,5 +113,8 @@ public:
 		"",
 		""
 	};
+
+	String thankYou =
+		"Thank you very much for participating in this experiment. Have a nice day!";
 
 };

@@ -52,10 +52,21 @@ private:
 		);
 	}
 
+	void updateContinuePrompt(int screenIdx)
+	{
+		continuePrompt.setVisible(true);
+		continuePrompt.setText
+		(
+			uiStrings.continueText_Screenwise[screenIdx]
+			, dontSendNotification
+		);
+	}
+
 	// Permanently Visible Elements
 	// Testing
 	Slider toggleScreenIdx;
 	int screenIdx_z1 = 0;
+	Label screenHeader;
 
 	// Time Monitoring
 	Label timeElapsed_Total;
@@ -98,13 +109,55 @@ private:
 	// Screen 6
 
 	// Screen 7
+	Label thankYou;
 
 	// Data Collection
 	Slider task;
 
 	// Data Collection
+	Label pleasantnessLabel;
 	Slider pleasantness;
+	Label longevityLabel;
 	Slider longevity;
+
+	void hideScreenSpecificUI()
+	{
+		// Screen 0
+		welcomeText.setVisible(false);
+
+		// Screen 1
+		participant_Name.setVisible(false);
+		participant_Name_Label.setVisible(false);
+		participant_Age.setVisible(false);
+		participant_Age_Label.setVisible(false);
+		for (int i = 0; i < 4; i++) participant_Gender[i].setVisible(false);
+		participant_Gender_Label.setVisible(false);
+		for (int i = 0; i < 4; i++) participant_Gender_Options_Labels[i].setVisible(false);
+		for (int i = 0; i < 3; i++)	participant_HearingLoss[i].setVisible(false);
+		participant_HearingLoss_Label.setVisible(false);
+		for (int i = 0; i < 3; i++) participant_HearingLoss_Options_Labels[i].setVisible(false);
+		for (int i = 0; i < 2; i++) participant_Handedness[i].setVisible(false);
+		participant_Handedness_Label.setVisible(false);
+		for (int i = 0; i < 2; i++) participant_Handedness_Options_Labels[i].setVisible(false);
+
+		// Screen 2
+
+		// Screen 3
+
+		// Screen 4
+		task.setVisible(false);
+
+		// Screen 5
+
+		// Screen 6
+		pleasantnessLabel.setVisible(false);
+		pleasantness.setVisible(false);
+		longevityLabel.setVisible(false);
+		longevity.setVisible(false);
+
+		// Screen 7
+		thankYou.setVisible(false);
+	};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SliderSonificationFinalAudioProcessorEditor)
 };
