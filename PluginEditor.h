@@ -67,6 +67,7 @@ private:
 	Slider toggleScreenIdx;
 	int screenIdx_z1 = 0;
 	Label screenHeader;
+	Label warning;
 
 	// Time Monitoring
 	Label timeElapsed_Total;

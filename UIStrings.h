@@ -17,6 +17,18 @@ public:
 		"End of Experiment"
 	};
 
+	String warnings[8] =
+	{
+		"",
+		"Please fill in all fields to continue.",
+		"",
+		"",
+		"",
+		"",
+		"",
+		""
+	};
+
 	String welcomeText =
 	"Welcome. Your task is to find a point on a horizontal line" 
 		" using different audio guidance types. \n \n" "Next, you will be asked to rate their "

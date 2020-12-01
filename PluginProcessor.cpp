@@ -37,7 +37,6 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 	int sess = experimentControl.session_Completed;
 	int blk = experimentControl.block_Completed;
 	int trial = experimentControl.trial_Current;
-	bool isAllOK = false;
 
 	switch (scr)
 	{
@@ -46,7 +45,7 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		if (isAllOK) experimentControl.idx_Screen = 1;
 		break;
 	case 1:				// PARTICIPANT DETAILS SCREEN
-		isAllOK = true; /////////////////////////////////////////////////
+		isAllOK = participantDetails.checkIfEntered(); 
 		if (isAllOK) experimentControl.idx_Screen = 2;
 		break;
 	case 2:				// SESSION INTRO SCREEN

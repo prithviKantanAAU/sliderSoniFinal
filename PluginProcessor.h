@@ -1,6 +1,7 @@
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "experimentStatus.h"
+#include "participantDetails.h"
 
 class SliderSonificationFinalAudioProcessor  : public AudioProcessor, public HighResolutionTimer
 {
@@ -30,7 +31,10 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 	void hiResTimerCallback();
+
+	bool isAllOK = false;
 	ExperimentControl experimentControl;
+	ParticipantDetails participantDetails;
 
 	KeyPress spaceBarContinue;
 	bool isSpaceDown = false;

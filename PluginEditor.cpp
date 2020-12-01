@@ -20,6 +20,11 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	screenHeader.setText(uiStrings.screenHeaders[processor.experimentControl.idx_Screen],dontSendNotification);
 	screenHeader.setJustificationType(juce::Justification::centred);
 	screenHeader.setFont(juce::Font(30.0f, juce::Font::bold));
+	
+	addAndMakeVisible(warning);
+	warning.setJustificationType(juce::Justification::centred);
+	warning.setColour(warning.textColourId, Colours::red);
+	warning.setFont(juce::Font(16.0f, juce::Font::italic));
 
 	// TESTING
 	addAndMakeVisible(toggleScreenIdx);
@@ -56,13 +61,23 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	participant_Name_Label.setText(uiStrings.participant_Name, dontSendNotification);
 	participant_Name_Label.attachToComponent(&participant_Name, true);
 	participant_Name.setJustification(Justification::centred);
+	participant_Name.onTextChange = [this]
+	{
+		String name = participant_Name.getText();
+		processor.participantDetails.name = name;
+	};
 
 	addAndMakeVisible(participant_Age);
 	addAndMakeVisible(participant_Age_Label);
 	participant_Age_Label.setText(uiStrings.participant_Age, dontSendNotification);
 	participant_Age_Label.attachToComponent(&participant_Age, true);
 	participant_Age.setJustification(Justification::centred);
-	
+	participant_Age.onTextChange = [this]
+	{
+		String age = participant_Age.getText();
+		processor.participantDetails.age = age;
+	};
+
 	addAndMakeVisible(participant_Gender_Label);
 	participant_Gender_Label.setText(uiStrings.participant_Gender, dontSendNotification);
 	for (int i = 0; i < 4; i++)
@@ -72,8 +87,17 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 		participant_Gender_Options_Labels[i].attachToComponent(&participant_Gender[i], true);
 		participant_Gender_Options_Labels[i].setText(uiStrings.participant_Gender_Options[i],dontSendNotification);
 
-		participant_Gender[i].onClick = [this]
+		participant_Gender[i].onClick = [this,i]
 		{
+			if (participant_Gender[i].getToggleState())
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					if (j != i) participant_Gender[j].setToggleState(false, dontSendNotification);
+				}
+				processor.participantDetails.gender = uiStrings.participant_Gender_Options[i];
+			}
+			else processor.participantDetails.gender = "";
 		};
 	}
 	
@@ -86,8 +110,17 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 		participant_HearingLoss_Options_Labels[i].attachToComponent(&participant_HearingLoss[i], true);
 		participant_HearingLoss_Options_Labels[i].setText(uiStrings.participant_HearingLoss_Options[i], dontSendNotification);
 
-		participant_HearingLoss[i].onClick = [this]
+		participant_HearingLoss[i].onClick = [this,i]
 		{
+			if (participant_HearingLoss[i].getToggleState())
+			{
+				for (int j = 0; j < 3; j++)
+				{
+					if (j != i) participant_HearingLoss[j].setToggleState(false, dontSendNotification);
+				}
+				processor.participantDetails.hearingLoss = uiStrings.participant_HearingLoss_Options[i];
+			}
+			else processor.participantDetails.hearingLoss = "";
 		};
 	}
 	
@@ -100,8 +133,17 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 		participant_Handedness_Options_Labels[i].attachToComponent(&participant_Handedness[i], true);
 		participant_Handedness_Options_Labels[i].setText(uiStrings.participant_Handedness_Options[i], dontSendNotification);
 
-		participant_Handedness[i].onClick = [this]
+		participant_Handedness[i].onClick = [this,i]
 		{
+			if (participant_Handedness[i].getToggleState())
+			{
+				for (int j = 0; j < 2; j++)
+				{
+					if (j != i) participant_Handedness[j].setToggleState(false, dontSendNotification);
+				}
+				processor.participantDetails.hand = uiStrings.participant_Handedness_Options[i];
+			}
+			else processor.participantDetails.hand = "";
 		};
 	}
 
@@ -124,6 +166,8 @@ void SliderSonificationFinalAudioProcessorEditor::timerCallback()
 {
 	bool isScreenChanged = (processor.experimentControl.idx_Screen != screenIdx_z1);
 	if (isScreenChanged) 	toggleScreen(processor.experimentControl.idx_Screen);
+	warning.setText(uiStrings.warnings[processor.experimentControl.idx_Screen], dontSendNotification);
+	warning.setVisible(!processor.isAllOK);
 
 	updateExptLabels();
 	screenIdx_z1 = processor.experimentControl.idx_Screen;
@@ -194,6 +238,7 @@ void SliderSonificationFinalAudioProcessorEditor::paint (Graphics& g)
 void SliderSonificationFinalAudioProcessorEditor::resized()
 {
 	screenHeader.setBounds(0, 0, 1200, 45);
+	warning.setBounds(0, 330, 1200, 25);
 
 	toggleScreenIdx.setBounds(10, 10, 200, 20);
 	timeElapsed_Total.setBounds(1030, 10, 170, 20);
