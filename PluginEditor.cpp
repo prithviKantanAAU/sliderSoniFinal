@@ -147,6 +147,28 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 		};
 	}
 
+	// SCREEN 2
+	addAndMakeVisible(sessionDescription);
+	sessionDescription.setText(
+		uiStrings.session_Instructions[processor.experimentControl.session_CurrentIdx]
+		, dontSendNotification
+	);
+	sessionDescription.setJustificationType(juce::Justification::centred);
+	sessionDescription.setFont(juce::Font(24.0f, juce::Font::bold));
+	
+	// SCREEN 3
+	addAndMakeVisible(blockDescription);
+	blockDescription.setText(
+		uiStrings.block_Names[processor.experimentControl.block_CurrentIdx]
+		, dontSendNotification
+	);
+	blockDescription.setJustificationType(juce::Justification::centred);
+	blockDescription.setFont(juce::Font(24.0f, juce::Font::bold));
+	addAndMakeVisible(blockTutorialLink);
+	blockTutorialLink.setButtonText("Watch Tutorial");
+	blockTutorialLink.setJustificationType(juce::Justification::centred);
+	blockTutorialLink.setURL(uiStrings.block_tutorial_URLs[processor.experimentControl.block_CurrentIdx]);
+
 	// SCREEN 4
 	addAndMakeVisible(task);
 	task.setRange(0, 1);
@@ -161,11 +183,24 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	};
 
 	addAndMakeVisible(resetTarget);
-	resetTarget.setButtonText("Reset");
+	resetTarget.setButtonText("New Target");
 	resetTarget.setColour(resetTarget.buttonColourId, Colours::red);
 	resetTarget.onClick = [this]
 	{
+		task.setValue(0);
+		processor.experimentControl.getNewTargetValue();
 	};
+
+	addAndMakeVisible(trainingMessage);
+	trainingMessage.setJustificationType(juce::Justification::centred);
+	trainingMessage.setFont(juce::Font(24.0f, juce::Font::bold));
+	trainingMessage.setText(uiStrings.isTraining, dontSendNotification);
+
+	// SCREEN 5
+	addAndMakeVisible(testingMessage);
+	testingMessage.setJustificationType(juce::Justification::centred);
+	testingMessage.setFont(juce::Font(24.0f, juce::Font::bold));
+	testingMessage.setText(uiStrings.isTrial, dontSendNotification);
 
 	// SCREEN 6
 	addAndMakeVisible(pleasantness);
@@ -249,14 +284,20 @@ void SliderSonificationFinalAudioProcessorEditor::toggleScreen(short newScreenId
 		for (int i = 0; i < 2; i++) participant_Handedness_Options_Labels[i].setVisible(true);
 		break;
 	case 2:											// Session Intro Screen
+		sessionDescription.setVisible(true);
 		break;
 	case 3:											// Block Intro/Instruction Screen
+		blockDescription.setVisible(true);
+		blockTutorialLink.setVisible(true);
 		break;
 	case 4:											// Training Screen
 		task.setVisible(true);
+		trainingMessage.setVisible(true);
 		resetTarget.setVisible(true);
 		break;
 	case 5:											// Trial Screen
+		timeRemaining.setVisible(true);
+		testingMessage.setVisible(true);
 		task.setVisible(true);
 		break;
 	case 6:											// Subjective Data Screen
@@ -306,9 +347,20 @@ void SliderSonificationFinalAudioProcessorEditor::resized()
 	participant_Handedness_Label.setBounds(80, 270, 400, 30);
 	for (int i = 0; i < 2; i++) participant_Handedness[i].setBounds(80 + 150 * i, 300, 150, 30);
 
+	// SCREEN 2
+	sessionDescription.setBounds(0, 160, 1200, 80);
+
+	// SCREEN 3
+	blockDescription.setBounds(0, 160, 1200, 80);
+	blockTutorialLink.setBounds(0, 250, 1200, 30);
+
 	// SCREEN 4
+	trainingMessage.setBounds(0, 140, 1200, 80);
 	task.setBounds(10, 200, 1180,30);
 	resetTarget.setBounds(1040, 230, 140, 25);
+
+	// SCREEN 5
+	testingMessage.setBounds(0, 140, 1200, 80);
 
 	// SCREEN 6
 	pleasantnessLabel.setBounds(0, 100, 1200, 50);

@@ -110,13 +110,23 @@ private:
 	//  7: Conclusion Screen
 
 	// Screen 2
+	Label sessionDescription;
 
 	// Screen 3
+	Label blockDescription;
+	HyperlinkButton blockTutorialLink;
+	void updateTutorialURL(int blockIdx)
+	{
+		blockTutorialLink.setURL(uiStrings.block_tutorial_URLs[blockIdx]);
+	};
 
 	// Screen 4
+	Label trainingMessage;
 	TextButton resetTarget;
 
 	// Screen 5
+	Label timeRemaining;
+	Label testingMessage;
 
 	// Screen 6
 	Label pleasantnessLabel;
@@ -152,14 +162,20 @@ private:
 		for (int i = 0; i < 2; i++) participant_Handedness_Options_Labels[i].setVisible(false);
 
 		// Screen 2
+		sessionDescription.setVisible(false);
 
 		// Screen 3
+		blockDescription.setVisible(false);
+		blockTutorialLink.setVisible(false);
 
 		// Screen 4
 		task.setVisible(false);
+		trainingMessage.setVisible(false);
 		resetTarget.setVisible(false);
 
 		// Screen 5
+		testingMessage.setVisible(false);
+		timeRemaining.setVisible(false);
 
 		// Screen 6
 		pleasantnessLabel.setVisible(false);

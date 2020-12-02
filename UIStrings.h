@@ -47,10 +47,10 @@ public:
 		"Current Trial: ";
 
 	String isTraining =
-		"TRAINING MODE";
+		"This is the training phase, where you can try to find a target as many times as you like.";
 
 	String isTrial =
-		"TEST MODE";
+		"Your responses are now being recorded (FOUR in total).";
 
 	// FILLING IN PERSONAL DETAILS
 	String participant_Name = "Name";
@@ -84,7 +84,7 @@ public:
 		"Press SPACE to proceed.",
 		"Press SPACE to begin the session.",
 		"Press SPACE to begin the training phase.",
-		"Press SPACE to begin the testing phase.",
+		"Press SPACE to begin the testing phase (time starts immediately).",
 		"Press SPACE when you have located the target.",
 		"Press SPACE to proceed.",
 		"Press SPACE to conclude the experiment."
@@ -124,6 +124,20 @@ public:
 		"",
 		"",
 		""
+	};
+
+	String block_tutorial_URLs[10] = 
+	{
+		"www.google.com",
+		"www.google.com",
+		"www.google.com",
+		"www.google.com",
+		"www.google.com",
+		"www.google.com",
+		"www.google.com",
+		"www.google.com",
+		"www.google.com",
+		"www.google.com"
 	};
 
 	String pleasantnessText =
