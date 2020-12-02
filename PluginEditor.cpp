@@ -152,8 +152,53 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	task.setRange(0, 1);
 	task.setValue(0);
 	task.setTextBoxStyle(Slider::NoTextBox, true, 10, 10);
-	task.setColour(task.trackColourId, Colours::white);
+	task.setColour(task.trackColourId, Colours::yellow);
 	task.setColour(task.backgroundColourId, Colours::white);
+	task.setColour(task.thumbColourId, Colours::blue);
+	task.onValueChange = [this]
+	{
+		processor.experimentControl.val_taskSlider = task.getValue();
+	};
+
+	addAndMakeVisible(resetTarget);
+	resetTarget.setButtonText("Reset");
+	resetTarget.setColour(resetTarget.buttonColourId, Colours::red);
+	resetTarget.onClick = [this]
+	{
+	};
+
+	// SCREEN 6
+	addAndMakeVisible(pleasantness);
+	addAndMakeVisible(pleasantnessLabel);
+	pleasantness.setRange(1, 7);
+	pleasantness.setValue(4);
+	pleasantness.setNumDecimalPlacesToDisplay(0);
+	pleasantness.setColour(pleasantness.trackColourId, Colours::yellow);
+	pleasantness.setColour(pleasantness.backgroundColourId, Colours::white);
+	pleasantness.setColour(pleasantness.thumbColourId, Colours::blue);
+	pleasantnessLabel.setText(uiStrings.pleasantnessText, dontSendNotification);
+	pleasantnessLabel.setJustificationType(juce::Justification::centred);
+	pleasantnessLabel.setFont(juce::Font(24.0f, juce::Font::bold));
+	pleasantness.onValueChange = [this]
+	{
+		processor.experimentControl.rating_pleasantness_presentTrial = (int)pleasantness.getValue();
+	};
+
+	addAndMakeVisible(longevity);
+	addAndMakeVisible(longevityLabel);
+	longevity.setRange(1, 7);
+	longevity.setValue(4);
+	longevity.setNumDecimalPlacesToDisplay(0);
+	longevity.setColour(longevity.trackColourId, Colours::yellow);
+	longevity.setColour(longevity.backgroundColourId, Colours::white);
+	longevity.setColour(longevity.thumbColourId, Colours::blue);
+	longevityLabel.setText(uiStrings.longevityText, dontSendNotification);
+	longevityLabel.setJustificationType(juce::Justification::centred);
+	longevityLabel.setFont(juce::Font(24.0f, juce::Font::bold));
+	longevity.onValueChange = [this]
+	{
+		processor.experimentControl.rating_longevity_presentTrial = (int)longevity.getValue();
+	};
 
 	// SCREEN 7
 	addAndMakeVisible(thankYou);
@@ -209,6 +254,7 @@ void SliderSonificationFinalAudioProcessorEditor::toggleScreen(short newScreenId
 		break;
 	case 4:											// Training Screen
 		task.setVisible(true);
+		resetTarget.setVisible(true);
 		break;
 	case 5:											// Trial Screen
 		task.setVisible(true);
@@ -262,6 +308,13 @@ void SliderSonificationFinalAudioProcessorEditor::resized()
 
 	// SCREEN 4
 	task.setBounds(10, 200, 1180,30);
+	resetTarget.setBounds(1040, 230, 140, 25);
+
+	// SCREEN 6
+	pleasantnessLabel.setBounds(0, 100, 1200, 50);
+	pleasantness.setBounds(10, 150, 1180, 30);
+	longevityLabel.setBounds(0, 250, 1200, 50);
+	longevity.setBounds(10, 300, 1180, 30);
 
 	// SCREEN 7
 	thankYou.setBounds(0, 160, 1200, 80);

@@ -99,15 +99,30 @@ private:
 	Label			participant_Handedness_Label;
 	Label			participant_Handedness_Options_Labels[2];
 
+	// UI Status
+	//  0: Pre Expt Start Screen
+	//  1: Personal Details Screen
+	//  2: Session Intro Screen
+	//  3: Block Intro/Instruction Screen
+	//  4: Training Screen
+	//  5: Trial Screen
+	//  6: Subjective Data Screen
+	//  7: Conclusion Screen
+
 	// Screen 2
 
 	// Screen 3
 
 	// Screen 4
+	TextButton resetTarget;
 
 	// Screen 5
 
 	// Screen 6
+	Label pleasantnessLabel;
+	Slider pleasantness;
+	Label longevityLabel;
+	Slider longevity;
 
 	// Screen 7
 	Label thankYou;
@@ -115,11 +130,6 @@ private:
 	// Data Collection
 	Slider task;
 
-	// Data Collection
-	Label pleasantnessLabel;
-	Slider pleasantness;
-	Label longevityLabel;
-	Slider longevity;
 
 	void hideScreenSpecificUI()
 	{
@@ -147,6 +157,7 @@ private:
 
 		// Screen 4
 		task.setVisible(false);
+		resetTarget.setVisible(false);
 
 		// Screen 5
 

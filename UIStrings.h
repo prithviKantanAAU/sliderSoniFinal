@@ -100,16 +100,16 @@ public:
 
 	String block_Names[10] =
 	{
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		""
+		"Block Name #1",
+		"Block Name #2",
+		"Block Name #3",
+		"Block Name #4",
+		"Block Name #5",
+		"Block Name #6",
+		"Block Name #7",
+		"Block Name #8",
+		"Block Name #9",
+		"Block Name #10"
 	};
 
 	String block_Instructions[10] =
@@ -125,6 +125,12 @@ public:
 		"",
 		""
 	};
+
+	String pleasantnessText =
+		"I found the auditory guidance to be pleasant to listen to. \n (1 = Strongly Disagree // 7 = Strongly Agree)";
+
+	String longevityText =
+		"I would be prepared to use this form of guidance for a long period of time (a.k.a. hours). \n (1 = Strongly Disagree // 7 = Strongly Agree)";
 
 	String thankYou =
 		"Thank you very much for participating in this experiment. Have a nice day!";
