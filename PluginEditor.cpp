@@ -202,6 +202,14 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	testingMessage.setFont(juce::Font(24.0f, juce::Font::bold));
 	testingMessage.setText(uiStrings.isTrial, dontSendNotification);
 
+	addAndMakeVisible(timeRemaining);
+	timeRemaining.setJustificationType(juce::Justification::centred);
+	timeRemaining.setFont(juce::Font(24.0f, juce::Font::bold));
+	timeRemaining.setText(
+	"Remaining Time: " + String((int)processor.experimentControl.timeRemaining + 0.9) + "sec"
+	, dontSendNotification
+	);
+
 	// SCREEN 6
 	addAndMakeVisible(pleasantness);
 	addAndMakeVisible(pleasantnessLabel);
@@ -248,8 +256,8 @@ void SliderSonificationFinalAudioProcessorEditor::timerCallback()
 	if (isScreenChanged) 	toggleScreen(processor.experimentControl.idx_Screen);
 	warning.setText(uiStrings.warnings[processor.experimentControl.idx_Screen], dontSendNotification);
 	warning.setVisible(!processor.isAllOK);
-
 	updateExptLabels();
+	updateTimeRemaining();
 	screenIdx_z1 = processor.experimentControl.idx_Screen;
 }
 
@@ -361,6 +369,7 @@ void SliderSonificationFinalAudioProcessorEditor::resized()
 
 	// SCREEN 5
 	testingMessage.setBounds(0, 140, 1200, 80);
+	timeRemaining.setBounds(0, 60, 1200, 80);
 
 	// SCREEN 6
 	pleasantnessLabel.setBounds(0, 100, 1200, 50);

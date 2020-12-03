@@ -62,6 +62,22 @@ private:
 		);
 	}
 
+	void updateTimeRemaining()
+	{
+		if (processor.experimentControl.idx_Screen == 5)
+		{
+			if (processor.experimentControl.timeRemaining < 10)
+			{
+				timeRemaining.setVisible(true);
+				timeRemaining.setText(
+					"Remaining Time: " + String((int)(processor.experimentControl.timeRemaining + 0.9)) + "sec"
+					, dontSendNotification
+				);
+			}
+			else timeRemaining.setVisible(true);
+		}
+	};
+
 	// Permanently Visible Elements
 	// Testing
 	Slider toggleScreenIdx;
@@ -71,7 +87,6 @@ private:
 
 	// Time Monitoring
 	Label timeElapsed_Total;
-	Label timeLeft_Task;
 
 	// Experiment Monitoring
 	Label session_Present;

@@ -4,15 +4,22 @@ class ExperimentControl
 {
 public:
 
-	// Session Indices: 1: FAST // 2: PRECISE // 3: MIN OVERSHOOTS
+	// Session Indices: 0: FAST // 1: PRECISE // 2: MIN OVERSHOOTS
 	short session_Total = 3;											// 0 - 1 - 2
 	short session_CurrentIdx = 0;
 	short session_Completed = 0;
 	short session_Completed_Idx[3] = {-1,-1,-1};
+	short session_Order[3] = { 0,1,2 };
 
 	short block_Total = 10;												// 0 - 1 - 9
 	short block_CurrentIdx = 0;
 	short block_Completed = 0;
+	short block_Order[3][10] = 
+	{
+		{0,1,2,3,4,5,6,7,8,9},
+		{0,1,2,3,4,5,6,7,8,9},
+		{0,1,2,3,4,5,6,7,8,9}
+	};
 	short block_Completed_Idx[10] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 
 	short trial_Total = 4;
@@ -21,6 +28,14 @@ public:
 	double timeElapsed_SEC_FLOAT = 0;
 	int timeElapsed_MIN = 0;
 	int timeElapsed_SEC = 0;
+	double timeRemaining = 0;
+	double timeTotal_Sessionwise[3] = { 5, 100000, 100000 };
+	void decrementTimeRemaining(double dec)
+	{
+		if (session_CurrentIdx == 0 && isTrialON)
+		timeRemaining -= dec;
+		timeRemaining = fmax(0, timeRemaining);
+	};
 
 	// MEASUREMENTS
 	bool isTrialON = false;
@@ -50,18 +65,26 @@ public:
 
 	void beginSession()
 	{
-		session_CurrentIdx = getNewRandomIndex(session_Total, session_Completed, session_Completed_Idx);
+		session_CurrentIdx = session_Order[session_Completed];
+		idx_Screen = 2;
+		block_Completed = 0;
+		beginBlock();
+		// session_CurrentIdx = getNewRandomIndex(session_Total, session_Completed, session_Completed_Idx);
 	}
 
 	void beginBlock()
 	{
-		block_CurrentIdx = getNewRandomIndex(block_Total, block_Completed, block_Completed_Idx);
+		block_CurrentIdx = block_Order[session_CurrentIdx][block_Completed];
+		idx_Screen = 3;
+		// block_CurrentIdx = getNewRandomIndex(block_Total, block_Completed, block_Completed_Idx);
 	}
 
 	void beginTrial()
 	{
+		isTrialON = true;
 		getNewTargetValue();
 		trajectory_writeIdx = 0;
+		timeRemaining = timeTotal_Sessionwise[session_CurrentIdx];
 	}
 
 	// CONCLUDE PRESENT TRIAL
@@ -69,7 +92,21 @@ public:
 	{
 		// STORE Error, Time, Overshoots
 		// INCREMENT Trial Num
-		trial_Current = (trial_Current + 1) % trial_Total;
+		if (trial_Current < (trial_Total - 1))
+		{
+			beginTrial();
+		}
+		else
+		{
+			isTrialON = false;
+			idx_Screen = 6;
+		}
+		trial_Current =	(trial_Current + 1) % (trial_Total);
+	}
+
+	void updateCompletedBlock()
+	{
+		
 	}
 
 	// CONCLUDE PRESENT BLOCK
@@ -77,10 +114,13 @@ public:
 	{
 		// STORE pleasantness, longevity
 		// Find next block index
-		block_Completed++;
 		trial_Current = 0;
+		block_Completed++;
 		if (block_Completed < block_Total)
+		{
+			block_CurrentIdx = block_Order[session_CurrentIdx][block_Completed];
 			beginBlock();
+		}
 		else
 		{
 			endSession();
@@ -92,13 +132,14 @@ public:
 	void endSession()
 	{
 		session_Completed++;
-		block_Completed = 0;
+		
 		for (int i = 0; i < block_Total; i++) block_Completed_Idx[i] = -1;			// RESET ELAPSED BLOCKS
 		// Find next session index
 		if (session_Completed < session_Total)		beginSession();
 		else
 		{
-			// CONCLUDE EXPERIMENT
+			// WRITE FILE
+			idx_Screen = 7;
 		}
 	}
 

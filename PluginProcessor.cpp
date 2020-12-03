@@ -24,10 +24,12 @@ SliderSonificationFinalAudioProcessor::~SliderSonificationFinalAudioProcessor()
 void SliderSonificationFinalAudioProcessor::hiResTimerCallback()
 {
 	experimentControl.updateTimeVariables(0.001);
+	experimentControl.decrementTimeRemaining(0.001);					// ONLY HAPPENS IN SESSION 1
 
 	// CHECK FOR SPACE KEY PRESSES
 	isSpaceDown = spaceBarContinue.isKeyCurrentlyDown(KeyPress::spaceKey);
 	if (isSpaceDown && !wasSpaceDown) handleProceed();
+	if (experimentControl.timeRemaining <= 0.000001 && experimentControl.isTrialON) handleProceed();
 	wasSpaceDown = isSpaceDown;
 }
 
@@ -52,15 +54,24 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		isAllOK = true;
  		if (isAllOK) experimentControl.idx_Screen = 3;
 		break;
-	case 3:
+	case 3:				// BLOCK INTRO SCREEN
+		if (isAllOK) experimentControl.idx_Screen = 4;
 		break;
-	case 4:
+	case 4:				// TRAINING SCREEN
+		isAllOK = true;
+		if (isAllOK)
+		{
+			experimentControl.idx_Screen = 5;
+			experimentControl.beginTrial();
+		}
 		break;
-	case 5:
+	case 5:				// TESTING SCREEN
+		experimentControl.endTrial();
 		break;
-	case 6:
+	case 6:				// SUBJECTIVE RATINGS SCREEN
+		experimentControl.endBlock();
 		break;
-	case 7:
+	case 7:				// CONCLUSION
 		break;
 	}
 };
