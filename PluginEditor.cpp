@@ -2,7 +2,7 @@
 #include "PluginEditor.h"
 
 SliderSonificationFinalAudioProcessorEditor::SliderSonificationFinalAudioProcessorEditor (SliderSonificationFinalAudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
+    : AudioProcessorEditor (&p), processor (p), exptProgress(exptProgress_Var)
 {
     setSize (1200, 400);
 	startTimerHz(50);
@@ -25,6 +25,9 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	warning.setJustificationType(juce::Justification::centred);
 	warning.setColour(warning.textColourId, Colours::red);
 	warning.setFont(juce::Font(16.0f, juce::Font::italic));
+
+	addAndMakeVisible(exptProgress);
+	exptProgress.setColour(exptProgress.foregroundColourId, Colours::white);
 
 	// TESTING
 	addAndMakeVisible(toggleScreenIdx);
@@ -180,6 +183,8 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	task.onValueChange = [this]
 	{
 		processor.experimentControl.val_taskSlider = task.getValue();
+		processor.experimentControl.mapTargetDistance();
+		// DO FAUST SEQUENCER MAPPING TOO
 	};
 
 	addAndMakeVisible(resetTarget);
@@ -195,6 +200,12 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	trainingMessage.setJustificationType(juce::Justification::centred);
 	trainingMessage.setFont(juce::Font(24.0f, juce::Font::bold));
 	trainingMessage.setText(uiStrings.isTraining, dontSendNotification);
+
+	addAndMakeVisible(targetFound);
+	targetFound.setText("TARGET FOUND",dontSendNotification);
+	targetFound.setJustificationType(juce::Justification::centred);
+	targetFound.setFont(juce::Font(24.0f, juce::Font::bold));
+	targetFound.setColour(targetFound.textColourId, Colours::green);
 
 	// SCREEN 5
 	addAndMakeVisible(testingMessage);
@@ -292,18 +303,29 @@ void SliderSonificationFinalAudioProcessorEditor::toggleScreen(short newScreenId
 		for (int i = 0; i < 2; i++) participant_Handedness_Options_Labels[i].setVisible(true);
 		break;
 	case 2:											// Session Intro Screen
+		sessionDescription.setText(
+			uiStrings.session_Instructions[processor.experimentControl.session_CurrentIdx]
+			,dontSendNotification
+		);
 		sessionDescription.setVisible(true);
 		break;
 	case 3:											// Block Intro/Instruction Screen
+		blockDescription.setText(
+			uiStrings.block_Names[processor.experimentControl.block_CurrentIdx]
+			, dontSendNotification
+		);
+		updateTutorialURL(processor.experimentControl.block_CurrentIdx);
 		blockDescription.setVisible(true);
 		blockTutorialLink.setVisible(true);
 		break;
 	case 4:											// Training Screen
+		task.setValue(0);
 		task.setVisible(true);
 		trainingMessage.setVisible(true);
 		resetTarget.setVisible(true);
 		break;
 	case 5:											// Trial Screen
+		task.setValue(0);
 		timeRemaining.setVisible(true);
 		testingMessage.setVisible(true);
 		task.setVisible(true);
@@ -341,6 +363,7 @@ void SliderSonificationFinalAudioProcessorEditor::resized()
 	block_Present.setBounds(1030, 50, 170, 20);
 	trial_Present.setBounds(1030, 70, 170, 20);
 	continuePrompt.setBounds(0, 330, 1200, 80);
+	exptProgress.setBounds(0, 385, 1200, 15);
 
 	// SCREEN 0
 	welcomeText.setBounds(0, 160, 1200, 80);
@@ -363,12 +386,13 @@ void SliderSonificationFinalAudioProcessorEditor::resized()
 	blockTutorialLink.setBounds(0, 250, 1200, 30);
 
 	// SCREEN 4
-	trainingMessage.setBounds(0, 140, 1200, 80);
-	task.setBounds(10, 200, 1180,30);
+	trainingMessage.setBounds(0, 140, 1200, 40);
+	task.setBounds(10, 200, 1180, 30);
+	targetFound.setBounds(0, 230, 1200, 30);
 	resetTarget.setBounds(1040, 230, 140, 25);
 
 	// SCREEN 5
-	testingMessage.setBounds(0, 140, 1200, 80);
+	testingMessage.setBounds(0, 140, 1200, 30);
 	timeRemaining.setBounds(0, 60, 1200, 80);
 
 	// SCREEN 6

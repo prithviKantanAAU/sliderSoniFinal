@@ -33,14 +33,16 @@ private:
 		session_Present.setText
 		(
 			uiStrings.session_Current +
-			String(processor.experimentControl.session_Completed + 1)
+			//String(processor.experimentControl.session_Completed + 1)
+			String(processor.experimentControl.session_CurrentIdx + 1)
 			,dontSendNotification
 		);
 
 		block_Present.setText
 		(
 			uiStrings.block_Current +
-			String(processor.experimentControl.block_Completed + 1)
+			//String(processor.experimentControl.block_Completed + 1)
+			String(processor.experimentControl.block_CurrentIdx + 1)
 			,dontSendNotification
 		);
 
@@ -50,6 +52,15 @@ private:
 			String(processor.experimentControl.trial_Current + 1),
 			dontSendNotification
 		);
+
+		if (processor.experimentControl.idx_Screen == 4)
+		{
+			if (processor.experimentControl.expt_error_presentTrial < 1)
+				targetFound.setVisible(true);
+			else  targetFound.setVisible(false);
+		}
+
+		exptProgress_Var = processor.experimentControl.overallProgress;
 	}
 
 	void updateContinuePrompt(int screenIdx)
@@ -66,15 +77,15 @@ private:
 	{
 		if (processor.experimentControl.idx_Screen == 5)
 		{
-			if (processor.experimentControl.timeRemaining < 10)
+			if (processor.experimentControl.session_CurrentIdx == 0)
 			{
 				timeRemaining.setVisible(true);
 				timeRemaining.setText(
-					"Remaining Time: " + String((int)(processor.experimentControl.timeRemaining + 0.9)) + "sec"
+					"Remaining Time: " + String((int)(processor.experimentControl.timeRemaining + 0.99)) + " sec"
 					, dontSendNotification
 				);
 			}
-			else timeRemaining.setVisible(true);
+			else timeRemaining.setVisible(false);
 		}
 	};
 
@@ -84,6 +95,8 @@ private:
 	int screenIdx_z1 = 0;
 	Label screenHeader;
 	Label warning;
+	ProgressBar exptProgress;
+	double exptProgress_Var = 0.0;
 
 	// Time Monitoring
 	Label timeElapsed_Total;
@@ -138,6 +151,7 @@ private:
 	// Screen 4
 	Label trainingMessage;
 	TextButton resetTarget;
+	Label targetFound;
 
 	// Screen 5
 	Label timeRemaining;
@@ -187,6 +201,7 @@ private:
 		task.setVisible(false);
 		trainingMessage.setVisible(false);
 		resetTarget.setVisible(false);
+		targetFound.setVisible(false);
 
 		// Screen 5
 		testingMessage.setVisible(false);

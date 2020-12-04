@@ -29,7 +29,10 @@ void SliderSonificationFinalAudioProcessor::hiResTimerCallback()
 	// CHECK FOR SPACE KEY PRESSES
 	isSpaceDown = spaceBarContinue.isKeyCurrentlyDown(KeyPress::spaceKey);
 	if (isSpaceDown && !wasSpaceDown) handleProceed();
-	if (experimentControl.timeRemaining <= 0.000001 && experimentControl.isTrialON) handleProceed();
+	if (experimentControl.isTrialON)
+	{
+		if (experimentControl.timeRemaining <= 0.000001) handleProceed();
+	}
 	wasSpaceDown = isSpaceDown;
 }
 
@@ -39,6 +42,7 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 	int sess = experimentControl.session_Completed;
 	int blk = experimentControl.block_Completed;
 	int trial = experimentControl.trial_Current;
+	experimentControl.screensElapsed++;
 
 	switch (scr)
 	{
@@ -48,14 +52,36 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		break;
 	case 1:				// PARTICIPANT DETAILS SCREEN
 		isAllOK = participantDetails.checkIfEntered(); 
-		if (isAllOK) experimentControl.idx_Screen = 2;
+		if (isAllOK)
+		{
+			experimentControl.generateExptOrder();
+			experimentControl.beginSession();
+			experimentControl.idx_Screen = 2;
+		}
+		else experimentControl.screensElapsed--;
 		break;
 	case 2:				// SESSION INTRO SCREEN
 		isAllOK = true;
- 		if (isAllOK) experimentControl.idx_Screen = 3;
+		if (isAllOK)
+		{
+			experimentControl.beginBlock();
+			experimentControl.idx_Screen = 3;
+		}
 		break;
 	case 3:				// BLOCK INTRO SCREEN
-		if (isAllOK) experimentControl.idx_Screen = 4;
+		if (isAllOK)
+		{
+			if (experimentControl.session_Completed == 0)
+			{
+				experimentControl.idx_Screen = 4;
+				experimentControl.beginTraining();
+			}
+			else
+			{
+				experimentControl.idx_Screen = 5;
+				experimentControl.beginTrial();
+			}
+		}
 		break;
 	case 4:				// TRAINING SCREEN
 		isAllOK = true;
@@ -72,8 +98,13 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		experimentControl.endBlock();
 		break;
 	case 7:				// CONCLUSION
+		if (JUCEApplicationBase::isStandaloneApp())
+			JUCEApplicationBase::quit();
 		break;
 	}
+
+	experimentControl.overallProgress = (float)experimentControl.screensElapsed /
+		experimentControl.totalScreens;
 };
 
 const String SliderSonificationFinalAudioProcessor::getName() const

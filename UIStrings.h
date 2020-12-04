@@ -83,8 +83,8 @@ public:
 		"Press SPACE to begin the experiment.",
 		"Press SPACE to proceed.",
 		"Press SPACE to begin the session.",
-		"Press SPACE to begin the training phase.",
-		"Press SPACE to begin the testing phase (time starts immediately).",
+		"Press SPACE to proceed.",
+		"Press SPACE to begin the testing phase.",
 		"Press SPACE when you have located the target.",
 		"Press SPACE to proceed.",
 		"Press SPACE to conclude the experiment."
@@ -110,20 +110,6 @@ public:
 		"Block Name #8",
 		"Block Name #9",
 		"Block Name #10"
-	};
-
-	String block_Instructions[10] =
-	{
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		""
 	};
 
 	String block_tutorial_URLs[10] = 

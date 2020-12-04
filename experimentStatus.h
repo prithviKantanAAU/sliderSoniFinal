@@ -4,21 +4,24 @@ class ExperimentControl
 {
 public:
 
+	int screensElapsed = 0;
+	float totalScreens = 196;
+	double overallProgress = 0.0;
 	// Session Indices: 0: FAST // 1: PRECISE // 2: MIN OVERSHOOTS
 	short session_Total = 3;											// 0 - 1 - 2
 	short session_CurrentIdx = 0;
 	short session_Completed = 0;
 	short session_Completed_Idx[3] = {-1,-1,-1};
-	short session_Order[3] = { 0,1,2 };
+	short session_Order[3] = { -1,-1,-1 };
 
 	short block_Total = 10;												// 0 - 1 - 9
 	short block_CurrentIdx = 0;
 	short block_Completed = 0;
 	short block_Order[3][10] = 
 	{
-		{0,1,2,3,4,5,6,7,8,9},
-		{0,1,2,3,4,5,6,7,8,9},
-		{0,1,2,3,4,5,6,7,8,9}
+		{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+		{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+		{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
 	};
 	short block_Completed_Idx[10] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 
@@ -48,6 +51,7 @@ public:
 	float expt_overshoots[4][10][3];
 	float expt_target_presentTrial = 0.0;
 	float expt_error_presentTrial = 0.0;
+	float expt_error_presentTrial_z1 = 0.0;
 	float expt_time_presentTrial = 0.0;
 	float expt_overshoots_presentTrial = 0.0;
 
@@ -68,7 +72,7 @@ public:
 		session_CurrentIdx = session_Order[session_Completed];
 		idx_Screen = 2;
 		block_Completed = 0;
-		beginBlock();
+		// beginBlock();
 		// session_CurrentIdx = getNewRandomIndex(session_Total, session_Completed, session_Completed_Idx);
 	}
 
@@ -79,6 +83,11 @@ public:
 		// block_CurrentIdx = getNewRandomIndex(block_Total, block_Completed, block_Completed_Idx);
 	}
 
+	void beginTraining()
+	{
+		getNewTargetValue();
+	}
+
 	void beginTrial()
 	{
 		isTrialON = true;
@@ -87,10 +96,30 @@ public:
 		timeRemaining = timeTotal_Sessionwise[session_CurrentIdx];
 	}
 
+	void mapTargetDistance()
+	{
+		expt_error_presentTrial = (val_taskSlider - expt_target_presentTrial) * 100;
+		checkOvershoot(expt_error_presentTrial);
+		expt_error_presentTrial = fabs(expt_error_presentTrial);
+		expt_error_presentTrial_z1 = expt_error_presentTrial;
+	}
+
+	void checkOvershoot(float currentSliderValue)
+	{
+		if (currentSliderValue * expt_error_presentTrial_z1 < 0)
+			expt_overshoots_presentTrial++;
+	}
+
 	// CONCLUDE PRESENT TRIAL
 	void endTrial()
 	{
 		// STORE Error, Time, Overshoots
+		expt_error[trial_Current][block_CurrentIdx][session_CurrentIdx] = expt_error_presentTrial;
+		expt_overshoots[trial_Current][block_CurrentIdx][session_CurrentIdx] = expt_overshoots_presentTrial;
+		expt_time[trial_Current][block_CurrentIdx][session_CurrentIdx] = expt_time_presentTrial;
+
+		expt_time_presentTrial = 0;
+
 		// INCREMENT Trial Num
 		if (trial_Current < (trial_Total - 1))
 		{
@@ -113,6 +142,9 @@ public:
 	void endBlock()
 	{
 		// STORE pleasantness, longevity
+		rating_pleasantness[block_CurrentIdx][session_CurrentIdx] = rating_pleasantness_presentTrial;
+		rating_longevity[block_CurrentIdx][session_CurrentIdx] = rating_longevity_presentTrial;
+		
 		// Find next block index
 		trial_Current = 0;
 		block_Completed++;
@@ -187,6 +219,23 @@ public:
 	int idx_Screen = 0;
 
 	// IN-TRIAL HELPER FUNCTIONS
+
+	void generateExptOrder()
+	{
+		// SESSION
+
+		for (int i = 0; i < session_Total; i++)
+		{
+			session_Order[i] = getNewRandomIndex(session_Total, i, session_Order);
+
+			// BLOCKS
+			for (int j = 0; j < block_Total; j++)
+			{
+				block_Order[i][j] = getNewRandomIndex(block_Total, j, block_Order[i]);
+			}
+		}
+ 	}
+
 	Random randGen;
 	int getNewRandomIndex(int total, int totalElapsed, short *elapsedIndices)
 	{
@@ -201,7 +250,7 @@ public:
 
 		while (alreadyDone)
 		{
-			randomIndex = randGen.nextInt(total) + 1;
+			randomIndex = randGen.nextInt(total);
 			alreadyDone = false;
 			for (int i = 0; i < total; i++)
 			{
@@ -218,5 +267,6 @@ public:
 	{
 		int valuePre = randGen.nextInt(30);
 		expt_target_presentTrial = (float)(50 + valuePre) / 100.0;
+		mapTargetDistance();
 	}
 };
