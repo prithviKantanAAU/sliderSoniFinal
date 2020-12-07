@@ -87,6 +87,14 @@ private:
 			}
 			else timeRemaining.setVisible(false);
 		}
+
+		if (processor.experimentControl.idx_Screen == 8)
+		{
+			countIn.setText(
+				String((int)(processor.experimentControl.countInTimeLeft + 0.99)), 
+				dontSendNotification
+			);
+		}
 	};
 
 	// Permanently Visible Elements
@@ -169,6 +177,8 @@ private:
 	// Data Collection
 	Slider task;
 
+	// Screen 8
+	Label countIn;
 
 	void hideScreenSpecificUI()
 	{
@@ -215,6 +225,9 @@ private:
 
 		// Screen 7
 		thankYou.setVisible(false);
+
+		// Screen 8
+		countIn.setVisible(false);
 	};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SliderSonificationFinalAudioProcessorEditor)

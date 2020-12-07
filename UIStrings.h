@@ -5,7 +5,7 @@ class UIStrings
 {
 public:
 	
-	String screenHeaders[8] =
+	String screenHeaders[9] =
 	{
 		"Introduction",
 		"Participant Details",
@@ -14,7 +14,8 @@ public:
 		"Training Phase",
 		"Testing Phase",
 		"Subjective Ratings",
-		"End of Experiment"
+		"End of Experiment",
+		""
 	};
 
 	String warnings[8] =

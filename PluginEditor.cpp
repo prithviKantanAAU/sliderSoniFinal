@@ -259,6 +259,11 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	thankYou.setJustificationType(juce::Justification::centred);
 	thankYou.setText(uiStrings.thankYou, dontSendNotification);
 	thankYou.setFont(juce::Font(24.0f, juce::Font::bold));
+
+	// SCREEN 8
+	addAndMakeVisible(countIn);
+	countIn.setJustificationType(juce::Justification::centred);
+	countIn.setFont(juce::Font(24.0f, juce::Font::bold));
 }
 
 void SliderSonificationFinalAudioProcessorEditor::timerCallback()
@@ -339,7 +344,9 @@ void SliderSonificationFinalAudioProcessorEditor::toggleScreen(short newScreenId
 	case 7:											// Conclusion Screen
 		thankYou.setVisible(true);
 		break;
-
+	case 8:
+		countIn.setVisible(true);
+		break;
 	}
 }
 
@@ -403,4 +410,7 @@ void SliderSonificationFinalAudioProcessorEditor::resized()
 
 	// SCREEN 7
 	thankYou.setBounds(0, 160, 1200, 80);
+
+	// SCREEN 8
+	countIn.setBounds(0, 160, 1200, 80);
 }

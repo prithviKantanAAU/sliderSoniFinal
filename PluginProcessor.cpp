@@ -28,11 +28,15 @@ void SliderSonificationFinalAudioProcessor::hiResTimerCallback()
 
 	// CHECK FOR SPACE KEY PRESSES
 	isSpaceDown = spaceBarContinue.isKeyCurrentlyDown(KeyPress::spaceKey);
-	if (isSpaceDown && !wasSpaceDown) handleProceed();
-	if (experimentControl.isTrialON)
+	if (isSpaceDown && !wasSpaceDown && experimentControl.idx_Screen != 8) 
+		handleProceed();
+	if (experimentControl.isTrialON && experimentControl.idx_Screen == 5)
 	{
-		if (experimentControl.timeRemaining <= 0.000001) handleProceed();
+		if (experimentControl.timeRemaining <= 0.000001) 
+			handleProceed();
 	}
+	if (experimentControl.idx_Screen == 8 && experimentControl.countInTimeLeft <= 0.000001) 
+		handleProceed(); 
 	wasSpaceDown = isSpaceDown;
 }
 
@@ -71,15 +75,23 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 	case 3:				// BLOCK INTRO SCREEN
 		if (isAllOK)
 		{
-			if (experimentControl.session_Completed == 0)
+			if (experimentControl.session_Completed == 0)				// TRAINING ONLY IN FIRST SESSION
 			{
 				experimentControl.idx_Screen = 4;
 				experimentControl.beginTraining();
 			}
 			else
 			{
-				experimentControl.idx_Screen = 5;
-				experimentControl.beginTrial();
+				if (experimentControl.session_CurrentIdx == 0)			// IF SPEED SESSION, COUNT IN
+				{
+					experimentControl.countInTimeLeft = experimentControl.countInTimeMax;
+					experimentControl.idx_Screen = 8;
+				}
+				else
+				{
+					experimentControl.idx_Screen = 5;
+					experimentControl.beginTrial();
+				}
 			}
 		}
 		break;
@@ -87,8 +99,16 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		isAllOK = true;
 		if (isAllOK)
 		{
-			experimentControl.idx_Screen = 5;
-			experimentControl.beginTrial();
+			if (experimentControl.session_CurrentIdx == 0)
+			{
+				experimentControl.countInTimeLeft = experimentControl.countInTimeMax;
+				experimentControl.idx_Screen = 8;
+			}
+			else
+			{
+				experimentControl.idx_Screen = 5;
+				experimentControl.beginTrial();
+			}
 		}
 		break;
 	case 5:				// TESTING SCREEN
@@ -101,6 +121,9 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		if (JUCEApplicationBase::isStandaloneApp())
 			JUCEApplicationBase::quit();
 		break;
+	case 8:
+		experimentControl.idx_Screen = 5;
+		experimentControl.beginTrial();
 	}
 
 	experimentControl.overallProgress = (float)experimentControl.screensElapsed /

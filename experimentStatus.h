@@ -32,12 +32,17 @@ public:
 	int timeElapsed_MIN = 0;
 	int timeElapsed_SEC = 0;
 	double timeRemaining = 0;
+	double countInTimeLeft = 0;
+	double countInTimeMax = 3;
 	double timeTotal_Sessionwise[3] = { 5, 100000, 100000 };
 	void decrementTimeRemaining(double dec)
 	{
 		if (session_CurrentIdx == 0 && isTrialON)
 		timeRemaining -= dec;
 		timeRemaining = fmax(0, timeRemaining);
+
+		if (idx_Screen == 8)
+			countInTimeLeft -= dec;
 	};
 
 	// MEASUREMENTS
@@ -123,7 +128,14 @@ public:
 		// INCREMENT Trial Num
 		if (trial_Current < (trial_Total - 1))
 		{
-			beginTrial();
+			if (session_CurrentIdx == 0)
+			{
+				countInTimeLeft = countInTimeMax;
+				idx_Screen = 8;
+			}
+
+			else
+				beginTrial();
 		}
 		else
 		{
@@ -215,6 +227,7 @@ public:
 	//  5: Trial Screen
 	//  6: Subjective Data Screen
 	//  7: Conclusion Screen
+	//  8: Count In Screen
 
 	int idx_Screen = 0;
 
