@@ -40,6 +40,7 @@ public:
 	bool isSpaceDown = false;
 	bool wasSpaceDown = false;
 	void handleProceed();
+	long timerPulsesElapsed = 0;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SliderSonificationFinalAudioProcessor)

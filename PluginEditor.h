@@ -101,6 +101,7 @@ private:
 	// Testing
 	Slider toggleScreenIdx;
 	int screenIdx_z1 = 0;
+	int trialIdx_z1 = 0;
 	Label screenHeader;
 	Label warning;
 	ProgressBar exptProgress;

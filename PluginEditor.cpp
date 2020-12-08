@@ -269,12 +269,15 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 void SliderSonificationFinalAudioProcessorEditor::timerCallback()
 {
 	bool isScreenChanged = (processor.experimentControl.idx_Screen != screenIdx_z1);
+	bool isTrialChanged = (processor.experimentControl.trial_Current != trialIdx_z1);
 	if (isScreenChanged) 	toggleScreen(processor.experimentControl.idx_Screen);
+	if (isTrialChanged)		task.setValue(0);
 	warning.setText(uiStrings.warnings[processor.experimentControl.idx_Screen], dontSendNotification);
 	warning.setVisible(!processor.isAllOK);
 	updateExptLabels();
 	updateTimeRemaining();
 	screenIdx_z1 = processor.experimentControl.idx_Screen;
+	trialIdx_z1 = processor.experimentControl.trial_Current;
 }
 
 void SliderSonificationFinalAudioProcessorEditor::getNextScreenIdx()

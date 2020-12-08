@@ -1,9 +1,35 @@
 #pragma once
+#include "ExperimentLogStore.h"
 
 class ExperimentControl
 {
 public:
 
+	ExperimentControl()
+	{
+		for (int t = 0; t < trial_Total; t++)
+		{
+			for (int b = 0; b < block_Total; b++)
+			{
+				for (int s = 0; s < session_Total; s++)
+				{
+					expt_targets[t][b][s] = 0;
+					expt_error[t][b][s] = 0;
+					expt_time[t][b][s] = 0;
+					expt_overshoots[t][b][s] = 0;
+				}
+
+				for (int w = 0; w < 10000; w++)
+				{
+					trajectory_sliderPos_FAST[t][b][w] = 0;
+					trajectory_sliderPos_PRECISE[t][b][w] = 0;
+					trajectory_sliderPos_OVERSHOOT[t][b][w] = 0;
+				}
+			}
+		}
+	};
+
+	ExperimentLogStore exptLogStore;
 	int screensElapsed = 0;
 	float totalScreens = 196;
 	double overallProgress = 0.0;
@@ -97,6 +123,7 @@ public:
 	{
 		isTrialON = true;
 		getNewTargetValue();
+		expt_targets[trial_Current][block_CurrentIdx][session_CurrentIdx] = expt_target_presentTrial;
 		trajectory_writeIdx = 0;
 		timeRemaining = timeTotal_Sessionwise[session_CurrentIdx];
 	}
@@ -105,13 +132,13 @@ public:
 	{
 		expt_error_presentTrial = (val_taskSlider - expt_target_presentTrial) * 100;
 		checkOvershoot(expt_error_presentTrial);
-		expt_error_presentTrial = fabs(expt_error_presentTrial);
 		expt_error_presentTrial_z1 = expt_error_presentTrial;
+		expt_error_presentTrial = fabs(expt_error_presentTrial);
 	}
 
-	void checkOvershoot(float currentSliderValue)
+	void checkOvershoot(float currentError)
 	{
-		if (currentSliderValue * expt_error_presentTrial_z1 < 0)
+		if (currentError * expt_error_presentTrial_z1 < 0)
 			expt_overshoots_presentTrial++;
 	}
 
@@ -123,7 +150,9 @@ public:
 		expt_overshoots[trial_Current][block_CurrentIdx][session_CurrentIdx] = expt_overshoots_presentTrial;
 		expt_time[trial_Current][block_CurrentIdx][session_CurrentIdx] = expt_time_presentTrial;
 
+		expt_error_presentTrial = 0;
 		expt_time_presentTrial = 0;
+		expt_overshoots_presentTrial = 0;
 
 		// INCREMENT Trial Num
 		if (trial_Current < (trial_Total - 1))
@@ -182,7 +211,8 @@ public:
 		if (session_Completed < session_Total)		beginSession();
 		else
 		{
-			// WRITE FILE
+			exptLogStore.createAndConfigFile();
+			exptLogStore.saveLog();
 			idx_Screen = 7;
 		}
 	}

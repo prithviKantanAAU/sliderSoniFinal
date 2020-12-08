@@ -35,9 +35,14 @@ void SliderSonificationFinalAudioProcessor::hiResTimerCallback()
 		if (experimentControl.timeRemaining <= 0.000001) 
 			handleProceed();
 	}
+	if (timerPulsesElapsed % 20 == 0)
+	experimentControl.storeSliderTrajectoryVal();
+
 	if (experimentControl.idx_Screen == 8 && experimentControl.countInTimeLeft <= 0.000001) 
 		handleProceed(); 
 	wasSpaceDown = isSpaceDown;
+
+	timerPulsesElapsed++;
 }
 
 void SliderSonificationFinalAudioProcessor::handleProceed()
