@@ -1,5 +1,6 @@
 #pragma once
 #include "ExperimentLogStore.h"
+#include "participantDetails.h"
 
 class ExperimentControl
 {
@@ -29,6 +30,7 @@ public:
 		}
 	};
 
+	ParticipantDetails participantDetails;
 	ExperimentLogStore exptLogStore;
 	int screensElapsed = 0;
 	float totalScreens = 196;
@@ -211,8 +213,9 @@ public:
 		if (session_Completed < session_Total)		beginSession();
 		else
 		{
-			exptLogStore.createAndConfigFile();
-			exptLogStore.saveLog();
+			createAndConfigFile();
+			saveLog_EXPT();
+			saveLog_TRAJ();
 			idx_Screen = 7;
 		}
 	}
@@ -311,5 +314,151 @@ public:
 		int valuePre = randGen.nextInt(30);
 		expt_target_presentTrial = (float)(50 + valuePre) / 100.0;
 		mapTargetDistance();
+	}
+
+	void createAndConfigFile()
+	{
+		exptLogStore.filePath_EXPT = exptLogStore.
+			forRootDirectory.getSpecialLocation(File::currentApplicationFile).getFullPathName();
+		exptLogStore.filePath_EXPT = exptLogStore.filePath_EXPT.upToLastOccurrenceOf("\\", true, false);
+		exptLogStore.filePath_EXPT += participantDetails.name + " - " + exptLogStore.getCurrentTime();
+
+		exptLogStore.filePath_EXPT_LOG = exptLogStore.filePath_EXPT + "\\Measurements.csv";
+		exptLogStore.filePath_TRAJ1 = exptLogStore.filePath_EXPT + "\\Trajectories - S1.csv";
+		exptLogStore.filePath_TRAJ2 = exptLogStore.filePath_EXPT + "\\Trajectories - S2.csv";
+		exptLogStore.filePath_TRAJ3 = exptLogStore.filePath_EXPT + "\\Trajectories - S3.csv";
+
+		CreateDirectory(exptLogStore.filePath_EXPT.toStdString().c_str(), NULL);
+		exptLogStore.fileObj[0] = fopen(exptLogStore.filePath_EXPT_LOG.toStdString().c_str(), "w");
+		exptLogStore.fileObj[1] = fopen(exptLogStore.filePath_TRAJ1.toStdString().c_str(), "w");
+		exptLogStore.fileObj[2] = fopen(exptLogStore.filePath_TRAJ2.toStdString().c_str(), "w");
+		exptLogStore.fileObj[3] = fopen(exptLogStore.filePath_TRAJ3.toStdString().c_str(), "w");
+	};
+
+	void saveLog_EXPT()
+	{
+		String data = "";
+		bool isSubjRatingDuplicate = false;
+
+		// Participant Metadata
+		data = participantDetails.name + "," + participantDetails.age + "," + participantDetails.hearingLoss
+			+ "," + participantDetails.hand;
+		exptLogStore.save_Expt_LogLine(data);
+
+		for (int s = 0; s < session_Total; s++)							// FOR EACH SESSION
+		{
+			data = exptLogStore.names_Sessions[s];
+			exptLogStore.save_Expt_LogLine(data);
+
+			for (int v = 0; v < 5; v++)									// FOR EACH VARIABLE
+			{
+				data = exptLogStore.names_Variables[v];
+				exptLogStore.save_Expt_LogLine(data);
+
+				for (int t = 0; t < trial_Total; t++)					// FOR EACH TRIAL
+				{
+					data = "";
+					for (int b = 0; b < block_Total; b++)				// FOR EACH BLOCK
+					{
+						switch (v)
+						{
+						case 0:
+							data += String(expt_error[t][b][s]) + ",";
+							break;
+						case 1:
+							data += String(expt_time[t][b][s]) + ",";
+							break;
+						case 2:
+							data += String(expt_overshoots[t][b][s]) + ",";
+							break;
+						case 3:
+							data += String(rating_pleasantness[b][s]) + ",";
+							break;
+						case 4:
+							data += String(rating_longevity[b][s]) + ",";
+							break;
+						}
+					}
+					isSubjRatingDuplicate = (v > 2 && t > 0);
+					if (!isSubjRatingDuplicate) exptLogStore.save_Expt_LogLine(data);
+				}
+			}
+		}
+		fclose(exptLogStore.fileObj[0]);
+	};
+
+	void saveLog_TRAJ()
+	{
+		float minTime = 0;
+		float maxTime = 0;
+		maxTime = exptLogStore.minMax(expt_time, &minTime, &maxTime);
+		int numTrajSamples = maxTime * 50;
+		String data = "";
+		// OPEN FILE
+
+		for (int s = 0; s < session_Total; s++)							// FOR EACH SESSION
+		{
+			for (int b = 0; b < block_Total; b++)						// FOR EACH BLOCK
+			{
+				// Block Header
+				data += "Block " + String(b + 1) + ",,,,";
+			}
+			
+			exptLogStore.save_Traj_LogLine(s, data);
+			data = "";
+
+			// TRIAL IDX
+			for (int b = 0; b < block_Total; b++)						// FOR EACH BLOCK
+			{
+				for (int t = 0; t < trial_Total; t++)					// FOR EACH TRIAL
+				{
+					data += String(t + 1) + ",";
+				}
+			}
+
+			exptLogStore.save_Traj_LogLine(s, data);
+			data = "";
+
+			// TARGETS
+			for (int b = 0; b < block_Total; b++)						// FOR EACH BLOCK
+			{
+				for (int t = 0; t < trial_Total; t++)					// FOR EACH TRIAL
+				{
+					data += String(expt_targets[t][b][s]) + ",";
+				}
+			}
+
+			exptLogStore.save_Traj_LogLine(s, data);
+			data = "";
+
+			for (int idx = 0; idx < numTrajSamples; idx++)					// STORING EACH SAMPLE (ROW)
+			{
+				for (int b = 0; b < block_Total; b++)					// FOR EACH BLOCK
+				{
+					for (int t = 0; t < trial_Total; t++)				// FOR EACH TRIAL
+					{
+						switch (s)
+						{
+						case 0:
+							data += String(trajectory_sliderPos_FAST[t][b][idx]) + ",";
+							break;
+						case 1:
+							data += String(trajectory_sliderPos_PRECISE[t][b][idx]) + ",";
+							break;
+						case 2:
+							data += String(trajectory_sliderPos_OVERSHOOT[t][b][idx]) + ",";
+							break;
+						}
+					}
+				}
+			}
+				
+			exptLogStore.save_Traj_LogLine(s, data);
+			data = "";
+			// CLOSE FILE
+			fclose(exptLogStore.fileObj[s + 1]);
+		}
+
+		
 	}
 };

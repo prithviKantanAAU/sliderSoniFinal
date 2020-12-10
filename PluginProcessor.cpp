@@ -35,7 +35,7 @@ void SliderSonificationFinalAudioProcessor::hiResTimerCallback()
 		if (experimentControl.timeRemaining <= 0.000001) 
 			handleProceed();
 	}
-	if (timerPulsesElapsed % 20 == 0)
+	if (timerPulsesElapsed % 20 == 0)								// 50 Hz
 	experimentControl.storeSliderTrajectoryVal();
 
 	if (experimentControl.idx_Screen == 8 && experimentControl.countInTimeLeft <= 0.000001) 
@@ -60,7 +60,7 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		if (isAllOK) experimentControl.idx_Screen = 1;
 		break;
 	case 1:				// PARTICIPANT DETAILS SCREEN
-		isAllOK = participantDetails.checkIfEntered(); 
+		isAllOK = experimentControl.participantDetails.checkIfEntered(); 
 		if (isAllOK)
 		{
 			experimentControl.generateExptOrder();

@@ -67,7 +67,7 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	participant_Name.onTextChange = [this]
 	{
 		String name = participant_Name.getText();
-		processor.participantDetails.name = name;
+		processor.experimentControl.participantDetails.name = name;
 	};
 
 	addAndMakeVisible(participant_Age);
@@ -78,7 +78,7 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	participant_Age.onTextChange = [this]
 	{
 		String age = participant_Age.getText();
-		processor.participantDetails.age = age;
+		processor.experimentControl.participantDetails.age = age;
 	};
 
 	addAndMakeVisible(participant_Gender_Label);
@@ -98,9 +98,9 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 				{
 					if (j != i) participant_Gender[j].setToggleState(false, dontSendNotification);
 				}
-				processor.participantDetails.gender = uiStrings.participant_Gender_Options[i];
+				processor.experimentControl.participantDetails.gender = uiStrings.participant_Gender_Options[i];
 			}
-			else processor.participantDetails.gender = "";
+			else processor.experimentControl.participantDetails.gender = "";
 		};
 	}
 	
@@ -121,9 +121,9 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 				{
 					if (j != i) participant_HearingLoss[j].setToggleState(false, dontSendNotification);
 				}
-				processor.participantDetails.hearingLoss = uiStrings.participant_HearingLoss_Options[i];
+				processor.experimentControl.participantDetails.hearingLoss = uiStrings.participant_HearingLoss_Options[i];
 			}
-			else processor.participantDetails.hearingLoss = "";
+			else processor.experimentControl.participantDetails.hearingLoss = "";
 		};
 	}
 	
@@ -144,9 +144,9 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 				{
 					if (j != i) participant_Handedness[j].setToggleState(false, dontSendNotification);
 				}
-				processor.participantDetails.hand = uiStrings.participant_Handedness_Options[i];
+				processor.experimentControl.participantDetails.hand = uiStrings.participant_Handedness_Options[i];
 			}
-			else processor.participantDetails.hand = "";
+			else processor.experimentControl.participantDetails.hand = "";
 		};
 	}
 
