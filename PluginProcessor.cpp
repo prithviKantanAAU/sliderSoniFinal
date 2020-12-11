@@ -58,6 +58,9 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 	case 0:				// WELCOME SCREEN
 		isAllOK = true;
 		if (isAllOK) experimentControl.idx_Screen = 1;
+		experimentControl.createAndConfigFile();
+		experimentControl.saveLog_EXPT();
+		experimentControl.saveLog_TRAJ();
 		break;
 	case 1:				// PARTICIPANT DETAILS SCREEN
 		isAllOK = experimentControl.participantDetails.checkIfEntered(); 

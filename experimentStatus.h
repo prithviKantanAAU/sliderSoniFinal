@@ -14,17 +14,19 @@ public:
 			{
 				for (int s = 0; s < session_Total; s++)
 				{
-					expt_targets[t][b][s] = 0;
-					expt_error[t][b][s] = 0;
-					expt_time[t][b][s] = 0;
-					expt_overshoots[t][b][s] = 0;
+					expt_targets[t][b][s] = t;
+					expt_error[t][b][s] = b;
+					expt_time[t][b][s] = 10;
+					expt_overshoots[t][b][s] = t;
+					rating_pleasantness[b][s] = b;
+					rating_longevity[b][s] = b - 1;
 				}
 
 				for (int w = 0; w < 10000; w++)
 				{
-					trajectory_sliderPos_FAST[t][b][w] = 0;
-					trajectory_sliderPos_PRECISE[t][b][w] = 0;
-					trajectory_sliderPos_OVERSHOOT[t][b][w] = 0;
+					trajectory_sliderPos_FAST[t][b][w] = w;
+					trajectory_sliderPos_PRECISE[t][b][w] = w + 1;
+					trajectory_sliderPos_OVERSHOOT[t][b][w] = w + 2;
 				}
 			}
 		}
@@ -342,17 +344,17 @@ public:
 
 		// Participant Metadata
 		data = participantDetails.name + "," + participantDetails.age + "," + participantDetails.hearingLoss
-			+ "," + participantDetails.hand;
+			+ "," + participantDetails.hand + ",";
 		exptLogStore.save_Expt_LogLine(data);
 
 		for (int s = 0; s < session_Total; s++)							// FOR EACH SESSION
 		{
-			data = exptLogStore.names_Sessions[s];
+			data = exptLogStore.names_Sessions[s] + ",";
 			exptLogStore.save_Expt_LogLine(data);
 
 			for (int v = 0; v < 5; v++)									// FOR EACH VARIABLE
 			{
-				data = exptLogStore.names_Variables[v];
+				data = exptLogStore.names_Variables[v] + ",";
 				exptLogStore.save_Expt_LogLine(data);
 
 				for (int t = 0; t < trial_Total; t++)					// FOR EACH TRIAL
@@ -380,7 +382,8 @@ public:
 						}
 					}
 					isSubjRatingDuplicate = (v > 2 && t > 0);
-					if (!isSubjRatingDuplicate) exptLogStore.save_Expt_LogLine(data);
+					if (!isSubjRatingDuplicate) 
+						exptLogStore.save_Expt_LogLine(data);
 				}
 			}
 		}
@@ -391,7 +394,7 @@ public:
 	{
 		float minTime = 0;
 		float maxTime = 0;
-		maxTime = exptLogStore.minMax(expt_time, &minTime, &maxTime);
+		exptLogStore.minMax(expt_time, &minTime, &maxTime);
 		int numTrajSamples = maxTime * 50;
 		String data = "";
 		// OPEN FILE
@@ -451,10 +454,9 @@ public:
 						}
 					}
 				}
+				exptLogStore.save_Traj_LogLine(s, data);
+				data = "";
 			}
-				
-			exptLogStore.save_Traj_LogLine(s, data);
-			data = "";
 			// CLOSE FILE
 			fclose(exptLogStore.fileObj[s + 1]);
 		}

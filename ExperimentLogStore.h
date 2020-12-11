@@ -13,13 +13,7 @@ public:
 
 	Time currentDateTime;
 	FILE *fileObj[4];
-	/*FILE *exptLog;
-	FILE *trajectories_S1;
-	FILE *trajectories_S2;
-	FILE *trajectories_S3;*/
-	
 	File forRootDirectory;
-
 	String filePath_EXPT = "";
 	String filePath_EXPT_LOG = "";
 	String filePath_TRAJ1 = "";
@@ -32,21 +26,14 @@ public:
 		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,\n";
 
 	std::string format_traj_BlockHeader =
-		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s"
-		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s"
-		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s"
-		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s"
-		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s"
-		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s"
-		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s"
-		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s"
-		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s"
-		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s\n";
+		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s,"
+		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s,"
+		"%s,%s,%s,%s, %s,%s,%s,%s, \n";
 
 	void save_Expt_LogLine(String commaSeparatedData)
 	{
 		// FIND NUMBER OF DATA VALUES PRESENT
-		int numDataValues = countFreq(",", commaSeparatedData.toStdString()) + 1;
+		int numDataValues = countFreq(",", commaSeparatedData.toStdString());
 		String data[10];
 
 		// SEPARATE INTO SUBSTRINGS
@@ -78,7 +65,7 @@ public:
 
 		// WRITE INTO LOG
 		fprintf(
-			fileObj[sessionIdx],
+			fileObj[sessionIdx + 1],
 			format_traj_BlockHeader.c_str(),
 			data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9],
 			data[10], data[11], data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19],
