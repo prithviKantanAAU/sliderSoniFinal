@@ -42,6 +42,8 @@ void SliderSonificationFinalAudioProcessor::hiResTimerCallback()
 		handleProceed(); 
 	wasSpaceDown = isSpaceDown;
 
+	experimentControl.handlePlayback();
+
 	timerPulsesElapsed++;
 }
 
@@ -105,6 +107,7 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		break;
 	case 4:				// TRAINING SCREEN
 		isAllOK = true;
+		experimentControl.isTrainingON = false;
 		if (isAllOK)
 		{
 			if (experimentControl.session_CurrentIdx == 0)

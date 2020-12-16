@@ -9,7 +9,7 @@ public:
 	};
 	~FaustStrings_AP() {};
 
-	String baseName = "/GaitSoni/";
+	String baseName = "/sliderSoniFinal/";
 
 	String SonificationNames[20] =
 	{

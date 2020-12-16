@@ -168,11 +168,8 @@ void Sequencer::togglePlayPause()
 	}
 	else
 	{
-		if (isFileLoaded)
-		{
-			onStartMusic();
-			isPlaying = true;
-		}
+		onStartMusic();
+		isPlaying = true;
 	}
 }
 

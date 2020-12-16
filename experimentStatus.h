@@ -1,6 +1,7 @@
 #pragma once
 #include "ExperimentLogStore.h"
 #include "participantDetails.h"
+#include "Sequencer.h"
 
 class ExperimentControl
 {
@@ -30,10 +31,14 @@ public:
 				}
 			}
 		}
+
+		populateGrooves();
+		sequencer.currentMusic.finalTimeStamp = 100000;
 	};
 
 	ParticipantDetails participantDetails;
 	ExperimentLogStore exptLogStore;
+	Sequencer sequencer;
 	int screensElapsed = 0;
 	float totalScreens = 196;
 	double overallProgress = 0.0;
@@ -76,6 +81,7 @@ public:
 	};
 
 	// MEASUREMENTS
+	bool isTrainingON = false;
 	bool isTrialON = false;
 	float val_taskSlider = 0;
 
@@ -120,7 +126,11 @@ public:
 
 	void beginTraining()
 	{
+		isTrainingON = true;
 		getNewTargetValue();
+		sequencer.stopMusic();
+		sequencer.togglePlayPause();
+		resetAndConfigureAP();
 	}
 
 	void beginTrial()
@@ -130,6 +140,9 @@ public:
 		expt_targets[trial_Current][block_CurrentIdx][session_CurrentIdx] = expt_target_presentTrial;
 		trajectory_writeIdx = 0;
 		timeRemaining = timeTotal_Sessionwise[session_CurrentIdx];
+		sequencer.stopMusic();
+		sequencer.togglePlayPause();
+		resetAndConfigureAP();
 	}
 
 	void mapTargetDistance()
@@ -138,6 +151,9 @@ public:
 		checkOvershoot(expt_error_presentTrial);
 		expt_error_presentTrial_z1 = expt_error_presentTrial;
 		expt_error_presentTrial = fabs(expt_error_presentTrial);
+
+		// APPLY MAPPING FUNCTION IF NECESSARY
+		// MAP DSPFAUST
 	}
 
 	void checkOvershoot(float currentError)
@@ -172,6 +188,7 @@ public:
 		}
 		else
 		{
+			sequencer.stopMusic();
 			isTrialON = false;
 			idx_Screen = 6;
 		}
@@ -316,6 +333,68 @@ public:
 		int valuePre = randGen.nextInt(30);
 		expt_target_presentTrial = (float)(50 + valuePre) / 100.0;
 		mapTargetDistance();
+	}
+
+	void handlePlayback()
+	{
+		if (isTrialON || isTrainingON)
+		{
+			// INCREMENT BASIC PLAYBACK COUNTERS
+			sequencer.timeElapsed_SONG += 0.001;
+			double tickInc = sequencer.tempoTickInc.getNewTickIncrement(
+				sequencer.midiTicksElapsed, sequencer.currentMusic.finalTimeStamp, sequencer.ticksPerMS);
+			sequencer.midiTicksElapsed += tickInc;
+			sequencer.tapTempoCounter = min(1, sequencer.tapTempoCounter + 0.001);		// Limit to 1
+
+			// RUN MUSICAL CLOCK CALLBACK
+			clockCallback(tickInc);
+
+			// STOP MUSIC IF SONG COMPLETE
+			if (sequencer.getSongProgress())
+				sequencer.stopMusic();
+		}
+	}
+
+	void clockCallback(double tickInc)
+	{
+		// IF CLOCK PULSE DUE, TRIGGER CLOCK
+		if (checkIfPulseDue())
+			triggerClock();
+
+		// CHECK FOR NEW MIDI EVENTS, HANDLE IF NEEDED
+		sequencer.check_Handle_New_MIDIEvents(tickInc);
+
+		// UPDATE MUSIC PHASE
+		sequencer.musicPhase.updatePhase(tickInc);
+	}
+
+	void triggerClock()
+	{
+		sequencer.incrementPulseCounter();
+		sequencer.lastPulseTime = sequencer.nextPulseTime;
+		sequencer.nextPulseTime += sequencer.midiTickIncrement;
+	}
+
+	bool checkIfPulseDue()
+	{
+		return (sequencer.midiTicksElapsed >= sequencer.nextPulseTime);
+	};
+
+	void populateGrooves()
+	{
+		File forAppDirectory;
+		String appPath = forAppDirectory.getSpecialLocation(File::currentApplicationFile).getFullPathName();
+		appPath = appPath.upToLastOccurrenceOf("\\", true, false);
+		appPath += "MIDI Drum Library\\Base\\";
+		sequencer.currentMusic.populateStyles(appPath);
+	}
+
+	void resetAndConfigureAP()
+	{
+		//RESET ALL AP
+		//CHOOSE WHETHER TRADITIONAL OR MUSICAL
+		//CHOOSE AP INDEX
+		//SET AP VALUE INITIALLY
 	}
 
 	void createAndConfigFile()

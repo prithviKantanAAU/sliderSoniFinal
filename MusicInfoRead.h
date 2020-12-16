@@ -16,7 +16,7 @@ public:
 	MidiFile midiObj;
 	File midiFile;
 	MidiTrack midiTracks[4];
-	float finalTimeStamp = 0;
+	float finalTimeStamp = 1000000;
 	float midi_ticksPerBeat;
 	int numTracksMidi = 0;
 	int currentTrack = 0;

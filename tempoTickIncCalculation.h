@@ -91,7 +91,7 @@ public:
 		if (fabs(ap_forSkew - 0.5) > 0.02)
 			apMult = (0.5 + ap_forSkew);
 
-		double percent_SongComplete = ticks_Elapsed / ticks_Total * 100.0;
+		double percent_SongComplete = fmax(0,ticks_Elapsed / ticks_Total) * 100.0;
 		int percent_IncChange_ReadIdx = (int)(percent_SongComplete * 100);
 		return tickIncrement_Base * apMult * (100.0 + percent_IncChange[percent_IncChange_ReadIdx]) / 100.0;
 	};
