@@ -124,7 +124,8 @@ public:
 	void beginBlock()
 	{
 		block_CurrentIdx = block_Order[session_CurrentIdx][block_Completed];
-		apString = apStrings.baseName.toStdString() + apStrings.SonificationNames[block_CurrentIdx].toStdString();
+
+		apString = (apStrings.baseName + apStrings.SonificationNames[block_CurrentIdx]).toStdString();
 		idx_Screen = 3;
 	}
 
@@ -160,7 +161,7 @@ public:
 
 
 		// MAP DSPFAUST
-		sequencer.dspFaust.setParamValue(apString.c_str(), expt_error_presentTrial);
+		sequencer.dspFaust.setParamValue(apString.c_str(), expt_error_presentTrial/100.0);
 	}
 
 	void checkOvershoot(float currentError)
@@ -172,6 +173,7 @@ public:
 	// CONCLUDE PRESENT TRIAL
 	void endTrial()
 	{
+		sequencer.stopMusic();
 		// STORE Error, Time, Overshoots
 		expt_error[trial_Current][block_CurrentIdx][session_CurrentIdx] = expt_error_presentTrial;
 		expt_overshoots[trial_Current][block_CurrentIdx][session_CurrentIdx] = expt_overshoots_presentTrial;
@@ -400,6 +402,17 @@ public:
 	{
 		//RESET ALL AP
 		//CHOOSE WHETHER TRADITIONAL OR MUSICAL
+		if (block_CurrentIdx < 5)
+		{
+			sequencer.dspFaust.setParamValue(apStrings.tradSoniToggle.toStdString().c_str(), 1);
+			sequencer.dspFaust.setParamValue(apStrings.tradSoniChoice.toStdString().c_str(), block_CurrentIdx);
+		}
+
+		else
+		{
+			sequencer.dspFaust.setParamValue(apStrings.tradSoniToggle.toStdString().c_str(), 0);
+			sequencer.dspFaust.setParamValue(apStrings.tradSoniChoice.toStdString().c_str(), 0);
+		}
 		//CHOOSE AP INDEX
 		//SET AP VALUE INITIALLY
 	}

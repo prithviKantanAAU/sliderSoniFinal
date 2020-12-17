@@ -228,8 +228,15 @@ In case you would like to use the the built-in accelerometer or gyroscope of you
 * **173**: `/SliderSoniFinal/Mapping_Tabs/Music_Info/Velocity/T6_V_1`
 * **174**: `/SliderSoniFinal/Mapping_Tabs/Music_Info/Velocity/T7_V_1`
 * **175**: `/SliderSoniFinal/Mapping_Tabs/Music_Info/Velocity/T8_V_1`
-* **176**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_10`
-* **177**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_9`
+* **176**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_1`
+* **177**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_10`
+* **178**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_2`
+* **179**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_3`
+* **180**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_4`
+* **181**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_5`
+* **182**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_9`
+* **183**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/Traditional_Strategies/Choice_Traditional`
+* **184**: `/SliderSoniFinal/Traditional`
 
 
 ## API Reference
