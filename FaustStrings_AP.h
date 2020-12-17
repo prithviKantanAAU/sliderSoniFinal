@@ -9,31 +9,20 @@ public:
 	};
 	~FaustStrings_AP() {};
 
-	String baseName = "/sliderSoniFinal/";
+	String baseName = "/SliderSoniFinal/";
 
 	String SonificationNames[20] =
 	{
-		"Punishment_Strategies/x_P1_Detune",
-		"Punishment_Strategies/x_P2_EnsembleDensity",
-		"Punishment_Strategies/x_P3_ChordFreqDist",
-
-		"Reward_Strategies/x_R1_InstLevel",
-		"",
-		"Reward_Strategies/x_R3_OverallBrightness",
-
-		"JerkSoni_Strategies/x_J1_MelBaseFreq",
-		"JerkSoni_Strategies/x_J2_Pitched",
-		"JerkSoni_Strategies/x_J3_Whoosh",
-
-		"HStrike_Strategies/x_H1_SnareTrigger",
-		"Punishment_Strategies/x_SB1_Ambulance",
-		"Punishment_Strategies/x_SB2_Instrumentation",
-		"Punishment_Strategies/x_SB3_EnsembleIntensity",
-		"JerkSoni_Strategies/x_STS1_Bell",
-		"JerkSoni_Strategies/x_STS2_MusicStop",
-		"JerkSoni_Strategies/x_STS2_Wah",
-		"",
-		"",
+		"Mapping_Tabs/Sonification_Types/AP_Values/Soni_0",			// T - Pitch
+		"Mapping_Tabs/Sonification_Types/AP_Values/Soni_1",			// T - Tempo
+		"Mapping_Tabs/Sonification_Types/AP_Values/Soni_2",			// T - Synchronicity
+		"Mapping_Tabs/Sonification_Types/AP_Values/Soni_3",			// T - Harmonicity
+		"Mapping_Tabs/Sonification_Types/AP_Values/Soni_4",			// T - Brightness
+		"Mapping_Tabs/Sonification_Types/AP_Values/Soni_5",			// M - Pitch (Degree)
+		"Mapping_Tabs/Sonification_Types/AP_Values/Soni_6",			// M - Tempo
+		"Mapping_Tabs/Sonification_Types/AP_Values/Soni_7",			// M - Synchronicity
+		"Mapping_Tabs/Sonification_Types/AP_Values/Soni_8",			// M - Harmonicity
+		"Mapping_Tabs/Sonification_Types/AP_Values/Soni_9",			// M - Brightness
 	};
 };
 

@@ -14,7 +14,7 @@ public:
 
 	};
 
-	std::string baseName = "/sliderSoniFinal/";
+	std::string baseName = "/SliderSoniFinal/";
 
 	std::string Tempo = baseName + "Mapping_Tabs/Music_Info/Tempo";
 	std::string Fluidity = baseName + "Mapping_Tabs/Music_Info/Fluidity";

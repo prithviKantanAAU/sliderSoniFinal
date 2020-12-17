@@ -2,6 +2,8 @@
 #include "ExperimentLogStore.h"
 #include "participantDetails.h"
 #include "Sequencer.h"
+#include "FaustStrings_AP.h"
+#include "audioParamInfo.h"
 
 class ExperimentControl
 {
@@ -39,9 +41,13 @@ public:
 	ParticipantDetails participantDetails;
 	ExperimentLogStore exptLogStore;
 	Sequencer sequencer;
+	FaustStrings_AP apStrings;
+	audioParamInfo audioParams;
+
 	int screensElapsed = 0;
 	float totalScreens = 196;
 	double overallProgress = 0.0;
+	std::string apString = "";
 	// Session Indices: 0: FAST // 1: PRECISE // 2: MIN OVERSHOOTS
 	short session_Total = 3;											// 0 - 1 - 2
 	short session_CurrentIdx = 0;
@@ -113,15 +119,13 @@ public:
 		session_CurrentIdx = session_Order[session_Completed];
 		idx_Screen = 2;
 		block_Completed = 0;
-		// beginBlock();
-		// session_CurrentIdx = getNewRandomIndex(session_Total, session_Completed, session_Completed_Idx);
 	}
 
 	void beginBlock()
 	{
 		block_CurrentIdx = block_Order[session_CurrentIdx][block_Completed];
+		apString = apStrings.baseName.toStdString() + apStrings.SonificationNames[block_CurrentIdx].toStdString();
 		idx_Screen = 3;
-		// block_CurrentIdx = getNewRandomIndex(block_Total, block_Completed, block_Completed_Idx);
 	}
 
 	void beginTraining()
@@ -129,7 +133,7 @@ public:
 		isTrainingON = true;
 		getNewTargetValue();
 		sequencer.stopMusic();
-		sequencer.togglePlayPause();
+		loadRandomMusicFile();
 		resetAndConfigureAP();
 	}
 
@@ -141,7 +145,7 @@ public:
 		trajectory_writeIdx = 0;
 		timeRemaining = timeTotal_Sessionwise[session_CurrentIdx];
 		sequencer.stopMusic();
-		sequencer.togglePlayPause();
+		loadRandomMusicFile();
 		resetAndConfigureAP();
 	}
 
@@ -153,7 +157,10 @@ public:
 		expt_error_presentTrial = fabs(expt_error_presentTrial);
 
 		// APPLY MAPPING FUNCTION IF NECESSARY
+
+
 		// MAP DSPFAUST
+		sequencer.dspFaust.setParamValue(apString.c_str(), expt_error_presentTrial);
 	}
 
 	void checkOvershoot(float currentError)
@@ -395,6 +402,27 @@ public:
 		//CHOOSE WHETHER TRADITIONAL OR MUSICAL
 		//CHOOSE AP INDEX
 		//SET AP VALUE INITIALLY
+	}
+
+	void loadRandomMusicFile()
+	{
+		String path = "";
+		File forAppDirectory;
+		String appPath = forAppDirectory.getSpecialLocation
+		(File::currentApplicationFile).getFullPathName().upToLastOccurrenceOf("\\", false, true)
+			+ "\\MIDI Library\\";
+		File currentFile;
+
+		auto dir_Base = File(appPath);
+		int numSongs = dir_Base.getNumberOfChildFiles(2, "*.mid");
+		auto songFiles_Base = dir_Base.findChildFiles(2, false, "*.mid");
+		songFiles_Base.sort();
+		int randomSongIdx = randGen.nextInt(numSongs - 1);
+		currentFile = songFiles_Base.getUnchecked(randomSongIdx);
+		path = appPath + "\\" + currentFile.getFileNameWithoutExtension() + ".mid";
+
+		sequencer.loadNewFile_MIDI(path);
+		sequencer.togglePlayPause();
 	}
 
 	void createAndConfigFile()

@@ -95,7 +95,7 @@ fluidity = musicInfoTab(vslider("Fluidity",1,0.05,10,0.01)) : limit(0.2,5);
 // Traditional Soni
 sonificationType = checkbox("Traditional");
 Soni_X_Trad = traditionalSoni(hslider("x_Traditional",0,0,1,0.001)) : si.smoo;
-Soni_Choice_Trad = traditionalSoni(hslider("Choice_Traditional",0,0,8,1)); 
+Soni_Choice_Trad = traditionalSoni(hslider("Choice_Traditional",0,0,4,1)); 
 
 //Variants
 VAR_1 = variantGroup(nentry("Variant_1",1,1,3,1));
@@ -130,7 +130,7 @@ ACC_R = accentInfo(hslider("T5_A_1",5,0,9,0.01));												// 5
 																								// VELOCITIES
 V_K = velocityInfo(hslider("T1_V_1",9,0,9,0.1));													// 1
 V_S = velocityInfo(hslider("T2_V_1",9,0,9,0.1));													// 2
-S_FNUM = ((V_S > 3) + (V_S > 6)) : ba.sAndH(V_S*TRG_S) : *(1 - S_isHEEL) + S_isHEEL*2;			// Snare - File Number
+S_FNUM = ((V_S > 3) + (V_S > 6)) : ba.sAndH(V_S*TRG_S);											// Snare - File Number
 V_HH = velocityInfo(hslider("T3_V_1",9,0,9,0.1)); 												// 3
 HH_FNUM = ((V_HH > 3) + (V_HH > 6)) : ba.sAndH(V_HH*TRG_HH);									// HH - File Number
 V_C_1 = velocityInfo(hslider("T4_V_1",9,0,9,0.1));												// 4-1
@@ -145,27 +145,20 @@ V_CR = velocityInfo(hslider("T8_V_1",9,0,9,0.1));												// 8
 
 //Sonification Sliders and Preprocessing
 soniSlider(idx,defaultVal) = sonificationTab(vgroup("AP Values",hslider("Soni %idx",defaultVal,0,1,0.001)));
-//Discrete
-Soni_Z_SB1 = 			soniSlider(1,0) : zonePreProcess;									// Ambulance
-Soni_Z_SB2 = 			soniSlider(2,0) : zonePreProcess;									// Instrumentation
-Soni_X_STS1_Bell = 		soniSlider(3,0) : ba.impulsify;									// Bell Trigger
-Soni_X_STS2_MusicStop = soniSlider(4,0) : >(0.1);											// Music Stop
-Soni_X_STS3_Wah =		soniSlider(5,0) : si.smoo;										// Wah Wah
-Soni_X_H1_TRG = 		soniSlider(6,0);													// HS Trigger
 
-// HS Slider Cooking
-HS_S_TRG = (abs(Soni_X_H1_TRG - 0.8) < 0.03) : ba.impulsify;
-HS_K_TRG = (abs(Soni_X_H1_TRG - 0.7) < 0.03) : ba.impulsify;
-S_isHEEL = Soni_X_H1_TRG > 0.49;
+// TRADITIONAL
+X_T_Pitch =							soniSlider(1,0);									
+X_T_Tempo =							soniSlider(2,0);									
+X_T_Synchronicity = 				soniSlider(3,0);									
+X_T_Harmonicity = 					soniSlider(4,0);									
+X_T_Brightness =			 		soniSlider(5,0);
 
-//Continuous
-Soni_X_P3_ChordFreqDist = 				soniSlider(7,0);									// Chord Freq Distortion
-Soni_X_R3_OverallBrightness = 			soniSlider(8,0);									// Overall Music Brightness
-Soni_X_J1_MelBaseFreq = 				soniSlider(9,0.5);									// Melody Tonic Frequency
-Soni_X_J2_Pitched = 					soniSlider(10,0);									// Pitched Disturbance
-Soni_X_J3_Whoosh = 						soniSlider(11,0);									// Noise Disturbance
-Soni_X_D1_Spatialize = 					soniSlider(12,0.5);									// Spatialization
-Soni_X_D1_Vowel =						soniSlider(13,0);									// Vowel
+// MUSICAL
+X_M_MelDegree =						soniSlider(6,0);									
+X_M_Tempo =							soniSlider(7,0);									
+X_M_Synchronicity = 				soniSlider(8,0);									
+X_M_Harmonicity = 					soniSlider(9,0);									
+X_M_Brightness =			 		soniSlider(10,0);									
 
 SONI_GAIN_DB = masterGainGroup(vslider("Soni Buss Gain",-8,-10,2,0.01));
 masterGain = masterGainGroup(vslider("Master Gain",-6,-96,12,0.01) : ba.db2linear);
@@ -183,7 +176,7 @@ hard_clip(limit) = _ : min(limit) : max(-1*limit) : _;
 // CONVERT VELOCITY VALUE TO TRIGGER ON CHANGE
 velToTrigger(vel) = trigger with
 {
-  trigger = (posTrig + negTrig)*(1 - Soni_X_STS2_MusicStop);
+  trigger = (posTrig + negTrig);
   posTrig = vel : ba.impulsify;
   negTrig = - 1 * (vel) : ba.impulsify : *(vel > 0);
 };
@@ -195,18 +188,6 @@ applyVelocity(velocity,trigger,maxVel) = _ : *(gainMult)	 with
   dBGain = (sampledVel - 10) * 26.0 / 9.0;
   gainMult = ba.db2linear(dBGain);
 };
-
-// CONVERT 0 - 1 SONI SLIDER VALUE TO 1 - 6 ZONE VALUE
-zonePreProcess(input) = output
-  with 
-{ 
-  output = par(i,6,isInZone(i)) :> int;
-  isInZone(i) = (i+1) * (input > SONI_SB_THRESH_VALS_RD(i)) * (input < SONI_SB_THRESH_VALS_RD(i+1));
-};
-
-// ZONE THRESHOLD VALUES - STORED IN READ TABLE
-SONI_SB_THRESH_VALS = waveform {-0.1, 0.33, 0.66, 0.8, 0.9, 0.95, 1.1};
-SONI_SB_THRESH_VALS_RD(i) = SONI_SB_THRESH_VALS,i : rdtable;
 
 // TEMPO-BASED INSTRUMENT RELEASE FACTOR
 tempo_RelFactor = fluidity + 1.5 * (120-tempo) / 40 * (tempo < 120);
@@ -225,8 +206,8 @@ stereoChannel(trackIndex) = stereoLinGain(0.25) : stereoEffect(channelComp(compT
 getChordFinalFreqs(LIST) = freqs with 
 {   
   freqs = par(i,4,freq(i));																							// CREATE FREQ LIST
-  freq(i) = freqs_pre(i) : Soni_J1_FreqWarpFactor : *(Soni_P3_freqDistFactor(i));									// APPLY TUNING SONIFICATIONS
-  Soni_P3_freqDistFactor(i) = LIST_FREQ_DISTFACTORS : ba.selectn(4,i) : *(Soni_X_P3_ChordFreqDist) : +(1);			// CALCULATE CHORD DIST AMOUNT
+  freq(i) = freqs_pre(i) : *(Soni_P3_freqDistFactor(i));									// APPLY TUNING SONIFICATIONS
+  Soni_P3_freqDistFactor(i) = LIST_FREQ_DISTFACTORS : ba.selectn(4,i) : *(X_M_Harmonicity) : +(1);			// CALCULATE CHORD DIST AMOUNT
   freqs_pre(i) = LIST : ba.selectn(4,i);																			// GET INDIVIDUAL MIDI KEYS
 };
 
@@ -325,7 +306,7 @@ fmSynth_Versatile(fc,modRatio,I_fixed,I_ampDependent,a,d,s,r,envType,trigger,vel
   dev = I * ampEnv * modFreq * os.triangle(modFreq);
   I = I_fixed + (I_ampDependent * acc_cooked * (0.5 + velFactor) + I_freq) * (ampEnv);
   I_freq = 4 * (fc - 300)/300;
-  modFreq = (modRatio + Soni_X_P3_ChordFreqDist) * fc_cooked;
+  modFreq = (modRatio + X_M_Harmonicity) * fc_cooked;
   release_basic = ba.tempo(ba.tempo(tempo))/ma.SR * (1 + velFactor * 2);
   env_basic = en.ar(a,release_basic,trigger);
   triggerCooked = (env_basic > 0.5) + (env_basic > env_basic');
@@ -347,7 +328,7 @@ with
   env = en.ar(0.001,synthRelease * tempo_RelFactor,trigger);													// MEL ENVELOPE
 vibLFO = os.osc(tempo/15);
   accVibrato = 1 + (0.00045 * acc * vibLFO) : si.smooth(ba.tau2pole(0.001));
-  soniVibratoLFO = 1 + Soni_X_P3_ChordFreqDist * vibLFO * 0.5 : si.smoo;								// CF DIST SONI - VIBRATO LFO
+  soniVibratoLFO = 1 + X_M_Harmonicity * vibLFO * 0.5 : si.smoo;								// CF DIST SONI - VIBRATO LFO
 };
 
 fmSynth(fundamental,numMod,freqFactor,release,depth,trigger) = (fmSynth + dirtyBus) * env 	with
@@ -381,8 +362,7 @@ voiceSynth_FormantBP(freq,vel,trigger,acc) = pm.SFFormantModelBP(2,vowel_H,fric,
 {
   	fric = 0.13 - acc/10.0 * 0.13 : max(0);
 	freqLow = freq / 2.0;
-  	//vowel_idx = _~+(trigger) : %(4) : _ + 0.2;
-  	vowel_idx = Soni_X_D1_Vowel;
+  	vowel_idx = 0;
 	env = en.ar(0.02, 1.5  / tempo * 78.6 * tempo_RelFactor * (1 + acc/5.0), trigger);
   	vowel_H = vowel_idx : si.smooth(ba.tau2pole(0.01));
 };
@@ -417,105 +397,18 @@ staticBalanceMult(z) = 0.5 * (z == 3) + 1.2 * (z == 4) + 1.4 * (z == 5), 0.5 * (
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // S O N I // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
 
-transientMelDip = dipON * -24 : ba.db2linear : si.smoo				// J2 + J3 - MELODY DIP
-with
-{
-  dipON = 1 * (Soni_X_J2_Pitched > 0.01) + 1 * (Soni_X_J3_Whoosh > 0.01) 												// JERK STRATEGY DIPS
-	
-	;
-};
-
-musicDuck = duckON * (-50) : ba.db2linear : si.smoo
-  with
-{
-  duckON = 1 * (Soni_Z_SB1 >= 3) + 0.5 * (Soni_Z_SB1 == 2)
-	;
-};
-
-SB_masterPan = out with
-{
-  out = _,_ : *(leftGain),*(rightGain);
-  leftGain =  1 - ((Soni_Z_SB1 == 6) + (Soni_Z_SB2 == 6)) : si.smoo;
-  rightGain = 1 - ((Soni_Z_SB1 == 5) + (Soni_Z_SB2 == 5)) : si.smoo;
-};
-
-// AMBULANCE
-Soni_SB1_Signal_Ambulance = output <: stereoLinMult(Soni_SB1_StereoMult)
-with
-{
-  output = os.triangle(frequencyCooked);
-  frequencyCooked = (0.5 + abs(os.osc(modFreq))) * 925;
-  modFreq = 0.15 * (Soni_Z_SB1 == 3) + 1.4 * (Soni_Z_SB1 > 3) + 0.5 * (Soni_Z_SB1 > 4);
-  Soni_SB1_StereoMult = staticBalanceMult(Soni_Z_SB1);
-};
-
-// INSTRUMENTATION 
-Soni_SB2_Instrumentation(trackIdx) = stereoLinGain(outGain)
-  with
-{
-  outGain = SONI_SB_Z2_ONOFF_RD(max(0,((trackIdx - 1) * 6 + Soni_Z_SB2 - 1))) : si.smoo;
-};
-
-// TONIC PITCH MODULATION
-Soni_J1_FreqWarpFactor = _* pow(Soni_J1_MaxWarpFactor,(2 * (Soni_X_J1_MelBaseFreq - 0.5)));
-
 // MASTER FILTER - LPF
 Soni_R3_Filter = fi.resonlp(cutoff,qCooked,1) with 																		// R3 - BRIGHTNESS
 {
-  cutoff = Soni_R3_Fc_Max - Soni_X_R3_OverallBrightness * (Soni_R3_Fc_Max - Soni_R3_Fc_Min) : si.smoo;					// CALCULTE CUTOFF
-  qCooked = 4 - 3.3 * pow(Soni_X_R3_OverallBrightness,2);																// CALCULATE F-DEPENDENT Q
-};
-
-// PITCHED DISTURBANCE
-Soni_J2_Pitched = os.sawtooth(frequency) * gain <: _,_ with																// J2 - PITCHED WAVE
-{
-  frequency = Soni_J2_minFreq + (Soni_J2_maxFreq - Soni_J2_minFreq) * pow(Soni_X_J2_Pitched,2);							// CALCULATE WAVE FREQUENCY
-  gain = Soni_X_J2_Pitched > 0.01 : si.smoo;																			// CALCULATE ON/OFF CONDITION
-};
-
-// SCRAMBLE DELAY - DISTURBANCE ACCOMPANYING
-Soni_J_Del = de.delay(ma.SR,delSamples),de.delay(ma.SR,delSamples) : filt,filt with
-{
-  jerkAP = (Soni_X_J2_Pitched + Soni_X_J3_Whoosh) : si.smooth(ba.tau2pole(30.0/tempo));
-  delSamples = jerkAP * ma.SR * 0.5*(1 + os.osc(tempo/30));
-  filt = fi.peak_eq_cq(10 * jerkAP,fc_filt,3);
-  fc_filt = 2000 + 2000 * jerkAP;
-};
-
-// NOISE WHOOSH
-Soni_J3_Whoosh = no.noise : filter(frequency) : _*(gain) <: _,_ with													// J3 - NOISE WHOOSH
-{
-  frequency = Soni_J3_minFreq + (Soni_J3_maxFreq - Soni_J3_minFreq) * Soni_X_J3_Whoosh * Soni_X_J3_Whoosh;				// CALCULATE FILTER FC
-  filter(x) = _ : fi.resonhp(Soni_J3_HPF_FC,0.7,1) : fi.resonlp(frequency,Soni_J3_LPF_Q,1);								// NOISE FILTER
-  gain = Soni_X_J3_Whoosh > 0.01 : si.smoo;																				// CALCULATE ON/OFF CONDITION
-};
-
-// BELL TRIGGER
-Soni_STS1_Bell = pm.churchBell(1,10000,0.8,1,Soni_X_STS1_Bell) * en.ar(0.001,2,Soni_X_STS1_Bell) <: stereodBGain(15);
-
-// WAH WAH
-Soni_STS3_LFO = os.osc(tempo/60);
-Soni_STS3_wahMinFreq = 250;			Soni_STS3_wahMaxFreq = 5000;
-Soni_STS3_Wah(LFO,minFreq,maxFreq) = _,_ : singleChannelWah,singleChannelWah with
-{
-  singleChannelWah = _ : fi.peak_eq_cq(currentGain,currentFreq,3.1) : *(ba.db2linear(-0.4*currentGain));
-  LFO_unipolar = 0.5*(LFO + 1);
-  currentFreq = (minFreq + LFO_unipolar*(maxFreq - minFreq));
-  currentGain = 22 * (Soni_X_STS3_Wah);
-};
-
-// SPATIALIZE
-Soni_D1_Spatialize_PAN = _,_ : _*(M_L),_*(M_R) with
-{
-  M_L = sqrt(1 - Soni_X_D1_Spatialize) * 1.414;
-  M_R = sqrt(Soni_X_D1_Spatialize)  * 1.414;
+  cutoff = Soni_R3_Fc_Max - X_M_Brightness * (Soni_R3_Fc_Max - Soni_R3_Fc_Min) : si.smoo;					// CALCULTE CUTOFF
+  qCooked = 4 - 3.3 * pow(X_M_Brightness,2);																// CALCULATE F-DEPENDENT Q
 };
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // Generation // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
 
 // TRIGGERS
-TRG_K = velToTrigger(V_K) * (1 - S_isHEEL);
-TRG_S = velToTrigger(V_S) * (1 - S_isHEEL);
+TRG_K = velToTrigger(V_K);
+TRG_S = velToTrigger(V_S);
 TRG_HH = velToTrigger(V_HH);
 TRG_C_1 = velToTrigger(V_C_1);
 TRG_C_2 = velToTrigger(V_C_2);
@@ -529,21 +422,21 @@ TRG_CR = velToTrigger(V_CR);
 
 //Kick
 
-kick_V1 = samplePlayer(K_SMPL_V1,TRG_K + HS_K_TRG);
-kick_V2 = samplePlayer(K_SMPL_V2,TRG_K + HS_K_TRG);
-kick_V3 = samplePlayer(K_SMPL_V3,TRG_K + HS_K_TRG);
+kick_V1 = samplePlayer(K_SMPL_V1,TRG_K);
+kick_V2 = samplePlayer(K_SMPL_V2,TRG_K);
+kick_V3 = samplePlayer(K_SMPL_V3,TRG_K);
 kickSynth = kick_V1,kick_V2,kick_V3 : ba.selectn(3,VAR_1 - 1);
 kick_Normal = kickSynth : applyVelocity(V_K,TRG_K,9); 
 kickTrack = kick_Normal,(kickSynth * 1.4) :> monoChannel(1) : getPanFunction(0);
 
 //Snare
 
-snare_V1 = samplePlayer(S_SMPL_V1_1,TRG_S + HS_S_TRG), samplePlayer(S_SMPL_V1_2,TRG_S + HS_S_TRG),samplePlayer(S_SMPL_V1_3,TRG_S + HS_S_TRG) : ba.selectn(3,S_FNUM);
-snare_V2 = samplePlayer(S_SMPL_V2_1,TRG_S + HS_S_TRG), samplePlayer(S_SMPL_V2_2,TRG_S + HS_S_TRG),samplePlayer(S_SMPL_V2_3,TRG_S + HS_S_TRG) : ba.selectn(3,S_FNUM);
-snare_V3 = samplePlayer(S_SMPL_V3_1,TRG_S + HS_S_TRG), samplePlayer(S_SMPL_V3_2,TRG_S + HS_S_TRG),samplePlayer(S_SMPL_V3_3,TRG_S + HS_S_TRG) : ba.selectn(3,S_FNUM);
+snare_V1 = samplePlayer(S_SMPL_V1_1,TRG_S), samplePlayer(S_SMPL_V1_2,TRG_S),samplePlayer(S_SMPL_V1_3,TRG_S) : ba.selectn(3,S_FNUM);
+snare_V2 = samplePlayer(S_SMPL_V2_1,TRG_S), samplePlayer(S_SMPL_V2_2,TRG_S),samplePlayer(S_SMPL_V2_3,TRG_S) : ba.selectn(3,S_FNUM);
+snare_V3 = samplePlayer(S_SMPL_V3_1,TRG_S), samplePlayer(S_SMPL_V3_2,TRG_S),samplePlayer(S_SMPL_V3_3,TRG_S) : ba.selectn(3,S_FNUM);
 snareSynth = snare_V1,snare_V2,snare_V3 : ba.selectn(3,VAR_2 - 1);
 snare_Normal = snareSynth : applyVelocity(V_S,TRG_S,3);
-snareTrack = snare_Normal,(snareSynth * 1.4) :> monoChannel(2) : getPanFunction(0) : Soni_J_Del;																		
+snareTrack = snare_Normal,(snareSynth * 1.4) :> monoChannel(2) : getPanFunction(0);																		
 
 //HH
 
@@ -551,7 +444,7 @@ hh_V1 = samplePlayer(HH_SMPL_V1_1,TRG_HH), samplePlayer(HH_SMPL_V1_2,TRG_HH),sam
 hh_V2 = samplePlayer(HH_SMPL_V2_1,TRG_HH), samplePlayer(HH_SMPL_V2_2,TRG_HH),samplePlayer(HH_SMPL_V2_3,TRG_HH) : ba.selectn(3,HH_FNUM);
 hh_V3 = pm.marimba(800,0.75,5000,1,1,TRG_HH) * 10;
 hhSynth = hh_V1,hh_V2,hh_V3 : ba.selectn(3,VAR_3 - 1);
-hhTrack = hhSynth : applyVelocity(V_HH,TRG_HH,3) : monoChannel(3) : getPanFunction(1) : Soni_J_Del;	
+hhTrack = hhSynth : applyVelocity(V_HH,TRG_HH,3) : monoChannel(3) : getPanFunction(1);	
 
 //Chord
 
@@ -574,7 +467,7 @@ chordTrack = chordSum : stereoChannel(4);
 
 //Riff
 
-F0_R = KEYNUM_R : Soni_J1_FreqWarpFactor;																					// CALCULATE F0 HZ
+F0_R = KEYNUM_R;																					// CALCULATE F0 HZ
 riff_V1 = fmSynth(F0_R,MOD_NUM_R,FREQ_FACTOR_R,RL_R,MOD_DEPTH_R,TRG_R);														// RIFF VARIANT 1
 riff_V2 = fmSynth_Versatile(F0_R,BASSLINE_MRATIO,BASSLINE_I_FIXED,BASSLINE_I_ENV,
 											  BASSLINE_A,BASSLINE_D,BASSLINE_S,BASSLINE_R,BASSLINE_ENVTYPE,TRG_R,V_R,ACC_R);		// RIFF VARIANT 2
@@ -585,7 +478,7 @@ riffTrack = riffSynth : applyVelocity(V_R,TRG_R,9) : monoChannel(5) : getPanFunc
 
 //Melody Main
 
-F0_M = KEYNUM_M : Soni_J1_FreqWarpFactor;
+F0_M = KEYNUM_M;
 V_M_SUS = V_M : ba.sAndH(TRG_M);
 M_FreqFactor = (F0_M - 300)/700 : si.smooth(ba.tau2pole(0.001));
 M_V1(freq) = voiceSynth_FormantBP(freq,V_M_SUS,TRG_M,ACC_M);																// MELODY SF - VARIANT 1
@@ -617,78 +510,57 @@ crash_V1 = samplePlayer(CR_SMPL_V1,TRG_CR);
 crash_V2 = samplePlayer(CR_SMPL_V2,TRG_CR);
 crash_V3 = samplePlayer(CR_SMPL_V3,TRG_CR);
 crashSynth = crash_V1,crash_V2,crash_V3 : ba.selectn(3,VAR_8 - 1);
-crashTrack = crashSynth : applyVelocity(V_CR,TRG_CR,9) : monoChannel(8) : getPanFunction(2) : Soni_J_Del;
+crashTrack = crashSynth : applyVelocity(V_CR,TRG_CR,9) : monoChannel(8) : getPanFunction(2);
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // TRADITIONAL STRATEGIES // // // // // // // // // // // // // // // // // // // // // // // // // // // //
 
-x = Soni_X_Trad;
-
 S1_Pitch = os.osc(S1_freq) *(0.5);
-S1_freq = S1_fmin * pow(2,x*S1_nOct);
+S1_freq = S1_fmin * pow(2,X_T_Pitch*S1_nOct);
 S1_fmin = 300;
 S1_nOct = 3.5;
 
-S2_Loudness = S2_Amp * os.osc(1000);
-S2_Amax = -5;
-S2_Amin = -40;
-S2_Amp = (ba.db2linear(S2_Amax) - ba.db2linear(S2_Amin)) * x + ba.db2linear(S2_Amin);
+S2_Tempo = os.osc(1000) * en.ar(0.001,0.05,S2_PulseTrain) *(0.5);
+S2_PulseTrain = ba.pulse(S2_SampleInterval);
+S2_TempoMax = 20*60; 		S2_TempoMin = 2*60;
+S2_IntervalRange = ba.tempo(S2_TempoMin) - ba.tempo(S2_TempoMax);
+S2_SampleInterval = ba.tempo(S2_TempoMax) + X_T_Tempo * (S2_IntervalRange);
 
-S3_Tempo = os.osc(1000) * en.ar(0.001,0.05,S3_PulseTrain) *(0.5);
-S3_PulseTrain = ba.pulse(S3_SampleInterval);
-S3_TempoMax = 20*60; 		S3_TempoMin = 2*60;
-S3_IntervalRange = ba.tempo(S3_TempoMin) - ba.tempo(S3_TempoMax);
-S3_SampleInterval = ba.tempo(S3_TempoMax) + x * (S3_IntervalRange);
+S3_Synchronicity = (S3_OriginalTrain + S3_Delayed) : en.ar(0.001,0.05) : *(os.osc(1000) *(0.5));
+S3_PulseFreq = 3;  S3_PeriodSamples = ba.sec2samp(1/S3_PulseFreq);
+S3_MaxSampleDelay = 0.25 * S3_PeriodSamples;
+S3_CurrentDelay = S3_MaxSampleDelay * X_T_Synchronicity; 
+S3_OriginalTrain = ba.pulse(S3_PeriodSamples);
+S3_Delayed = S3_OriginalTrain : de.fdelay(40000,S3_CurrentDelay);
 
-S4_Brightness = no.noise : fi.resonlp(S4_fc,0.7,1);
-S4_fc = S4_fmin * pow(2,(1-x)*S4_nOct);
-S4_fmin = 300;
-S4_nOct = 3.5;
+S4_Inharmonicity = (os.osc(S4_F) + S4_addedPartials) * 0.15;
+S4_addedPartials = par(i,15,S4_InharmExp(i)) :> _;
+S4_InharmExp(i) = os.osc(S4_F*i*sqrt(1+ X_T_Harmonicity/10*i*i));
+S4_F = 200;
 
-S5_FluctStrength = (0.5 * os.osc(1000) + 0.5 * os.osc(1000 + 10*x)) *(0.5);
+S5_Brightness = no.noise : fi.resonlp(S5_fc,0.7,1);
+S5_fc = S5_fmin * pow(2,(1-X_T_Brightness)*S5_nOct);
+S5_fmin = 300;
+S5_nOct = 3.5;
 
-S6_Synchronicity = (S6_OriginalTrain + S6_Delayed) : en.ar(0.001,0.05) : *(os.osc(1000) *(0.5));
-S6_PulseFreq = 3;  S6_PeriodSamples = ba.sec2samp(1/S6_PulseFreq);
-S6_MaxSampleDelay = 0.25 * S6_PeriodSamples;
-S6_CurrentDelay = S6_MaxSampleDelay * x; 
-S6_OriginalTrain = ba.pulse(S6_PeriodSamples);
-S6_Delayed = S6_OriginalTrain : de.fdelay(40000,S6_CurrentDelay);
-
-S7_Inharmonicity = (os.osc(S7_F) + S7_addedPartials) * 0.15;
-S7_addedPartials = par(i,15,S7_InharmExp(i)) :> _;
-S7_InharmExp(i) = os.osc(S7_F*i*sqrt(1+ x/10*i*i));
-S7_F = 200;
-
-S8_MBFM = par(i,7,os.triangle(S8_freqExp(i))) :> _ *(0.3);
-S8_freqExp(i) = i*S8_F + S8_I * os.osc(10*x);
-S8_I = 30;
-S8_F = 100;
-
-S9_MSB = par(k,S9_N,S9_innerLoop(k)) :> _*(0.5);
-S9_innerLoop(k) = par(m,S9_M,S9_innerExp(k,m));
-S9_innerExp(k,m) = os.osc(S9_F * k *(1 + m*(S9_alpha(x) - 1)));
-S9_alpha(dist) = 1 + 0.06*(dist);
-S9_F = 200; S9_N = 5; S9_M = 5;
-
-tradSoniOut = S1_Pitch,S2_Loudness,S3_Tempo,S4_Brightness,S5_FluctStrength,S6_Synchronicity,S7_Inharmonicity,S8_MBFM,S9_MSB : ba.selectn(9,Soni_Choice_Trad) <: _,_;
+tradSoniOut = S1_Pitch,S2_Tempo,S3_Synchronicity,S4_Inharmonicity,S5_Brightness : ba.selectn(5,Soni_Choice_Trad) <: _,_;
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // M A S T E R // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
 
-track1 = kickTrack 		: Soni_SB2_Instrumentation(1)														: stereoMasterSection(1);
-track2 = snareTrack 	: Soni_SB2_Instrumentation(2)														: stereoMasterSection(2);
-track3 = hhTrack 		: Soni_SB2_Instrumentation(3)			 											: stereoMasterSection(3);
-track4 = chordTrack 	: Soni_SB2_Instrumentation(4) 			 											: stereoMasterSection(4);
-track5 = riffTrack 		: Soni_SB2_Instrumentation(5)										 				: stereoMasterSection(5);
-track6 = melodyTrack 	: Soni_SB2_Instrumentation(6)													 	: stereoMasterSection(6);
-track7 = chordStabTrack : Soni_SB2_Instrumentation(7)												 		: stereoMasterSection(7);
-track8 = crashTrack 	: Soni_SB2_Instrumentation(8)													 	: stereoMasterSection(8);
+track1 = kickTrack 		: stereoMasterSection(1);
+track2 = snareTrack 	: stereoMasterSection(2);
+track3 = hhTrack 		: stereoMasterSection(3);
+track4 = chordTrack 	: stereoMasterSection(4);
+track5 = riffTrack 		: stereoMasterSection(5);
+track6 = melodyTrack 	: stereoMasterSection(6);
+track7 = chordStabTrack : stereoMasterSection(7);
+track8 = crashTrack 	: stereoMasterSection(8);
 
 percBus = track1,track2,track3,track8;
-reverbBus = track2,track3,track4,track6,track7 : par(i,5,stereodBGain(ba.take(i+1,REV_SND))) :> reverbMaster : stereoLinGain(transientMelDip);
-melBus = track4,track5,track6,track7,reverbBus :> Soni_STS3_Wah(Soni_STS3_LFO,Soni_STS3_wahMinFreq,Soni_STS3_wahMaxFreq) : stereoLinGain(transientMelDip);
-soniBus = Soni_J2_Pitched,Soni_J3_Whoosh,Soni_SB1_Signal_Ambulance,Soni_STS1_Bell
-  			:> stereodBGain(SONI_GAIN_DB);
-masterChannel = masterComp : stereoEffect(parametricEQ(masterEQGroup)) : stereoEffect(Soni_R3_Filter) : SB_masterPan 
-  						   : stereoLinGain(masterGain) : stereoEffect(masterLimiter(0)) : stereoEffect(hard_clip(1));
-musicBus = melBus,percBus,reverbBus :> stereoLinGain(musicDuck);
+reverbBus = track2,track3,track4,track6,track7 : par(i,5,stereodBGain(ba.take(i+1,REV_SND))) :> reverbMaster;
+melBus = track4,track5,track6,track7,reverbBus :> _,_;
 
-process = (musicBus,soniBus :> masterChannel : Soni_D1_Spatialize_PAN),tradSoniOut : ba.select2stereo(sonificationType);
+masterChannel = masterComp : stereoEffect(parametricEQ(masterEQGroup)) : stereoEffect(Soni_R3_Filter)
+  						   : stereoLinGain(masterGain) : stereoEffect(masterLimiter(0)) : stereoEffect(hard_clip(1));
+musicBus = melBus,percBus,reverbBus :> masterChannel;
+
+process = musicBus,tradSoniOut : ba.select2stereo(sonificationType);
