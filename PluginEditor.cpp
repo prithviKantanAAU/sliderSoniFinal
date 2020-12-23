@@ -175,7 +175,7 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	// SCREEN 4
 	addAndMakeVisible(task);
 	task.setRange(0, 1);
-	task.setValue(0);
+	task.setValue(0.000001);
 	task.setTextBoxStyle(Slider::NoTextBox, true, 10, 10);
 	task.setColour(task.trackColourId, Colours::yellow);
 	task.setColour(task.backgroundColourId, Colours::white);
@@ -327,16 +327,16 @@ void SliderSonificationFinalAudioProcessorEditor::toggleScreen(short newScreenId
 		blockTutorialLink.setVisible(true);
 		break;
 	case 4:											// Training Screen
-		task.setValue(0);
 		task.setVisible(true);
 		trainingMessage.setVisible(true);
 		resetTarget.setVisible(true);
+		task.setValue(0);
 		break;
 	case 5:											// Trial Screen
-		task.setValue(0);
 		timeRemaining.setVisible(true);
 		testingMessage.setVisible(true);
 		task.setVisible(true);
+		task.setValue(0);
 		break;
 	case 6:											// Subjective Data Screen
 		pleasantnessLabel.setVisible(true);

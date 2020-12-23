@@ -87,8 +87,8 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		{
 			if (experimentControl.session_Completed == 0)				// TRAINING ONLY IN FIRST SESSION
 			{
-				experimentControl.idx_Screen = 4;
 				experimentControl.beginTraining();
+				experimentControl.idx_Screen = 4;
 			}
 			else
 			{
@@ -99,8 +99,8 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 				}
 				else
 				{
-					experimentControl.idx_Screen = 5;
 					experimentControl.beginTrial();
+					experimentControl.idx_Screen = 5;
 				}
 			}
 		}
@@ -117,8 +117,8 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 			}
 			else
 			{
-				experimentControl.idx_Screen = 5;
 				experimentControl.beginTrial();
+				experimentControl.idx_Screen = 5;
 			}
 		}
 		break;
@@ -133,8 +133,8 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 			JUCEApplicationBase::quit();
 		break;
 	case 8:
-		experimentControl.idx_Screen = 5;
 		experimentControl.beginTrial();
+		experimentControl.idx_Screen = 5;
 	}
 
 	experimentControl.overallProgress = (float)experimentControl.screensElapsed /

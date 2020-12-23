@@ -161,7 +161,13 @@ public:
 
 
 		// MAP DSPFAUST
+		if (audioParams.audioParam_ObjectArray[block_CurrentIdx].type == 1)
 		sequencer.dspFaust.setParamValue(apString.c_str(), expt_error_presentTrial/100.0);
+
+		else
+		{
+			// INSERT SPECIFIC MAPPING CODE
+		}
 	}
 
 	void checkOvershoot(float currentError)
@@ -400,7 +406,8 @@ public:
 
 	void resetAndConfigureAP()
 	{
-		//RESET ALL AP
+		//RESET ALL AP - INSERT FUNCTION
+		
 		//CHOOSE WHETHER TRADITIONAL OR MUSICAL
 		if (block_CurrentIdx < 5)
 		{
@@ -415,6 +422,7 @@ public:
 		}
 		//CHOOSE AP INDEX
 		//SET AP VALUE INITIALLY
+		mapTargetDistance();
 	}
 
 	void loadRandomMusicFile()
