@@ -234,9 +234,10 @@ In case you would like to use the the built-in accelerometer or gyroscope of you
 * **179**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_3`
 * **180**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_4`
 * **181**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_5`
-* **182**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_9`
-* **183**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/Traditional_Strategies/Choice_Traditional`
-* **184**: `/SliderSoniFinal/Traditional`
+* **182**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_8`
+* **183**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/AP_Values/Soni_9`
+* **184**: `/SliderSoniFinal/Mapping_Tabs/Sonification_Types/Traditional_Strategies/Choice_Traditional`
+* **185**: `/SliderSoniFinal/Traditional`
 
 
 ## API Reference

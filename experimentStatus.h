@@ -126,6 +126,7 @@ public:
 		block_CurrentIdx = block_Order[session_CurrentIdx][block_Completed];
 
 		apString = (apStrings.baseName + apStrings.SonificationNames[block_CurrentIdx]).toStdString();
+		sequencer.soni_AP_Name = audioParams.audioParam_ObjectArray[block_CurrentIdx].name;
 		idx_Screen = 3;
 	}
 
@@ -158,15 +159,23 @@ public:
 		expt_error_presentTrial = fabs(expt_error_presentTrial);
 
 		// APPLY MAPPING FUNCTION IF NECESSARY
-
+		float mapOrder = audioParams.audioParam_ObjectArray[block_CurrentIdx].mappingOrder;
+		float apVal_Final = pow(expt_error_presentTrial / 100.0, mapOrder);
+		
+		if (expt_error_presentTrial < 1)
+			apVal_Final = 0;
 
 		// MAP DSPFAUST
 		if (audioParams.audioParam_ObjectArray[block_CurrentIdx].type == 1)
-		sequencer.dspFaust.setParamValue(apString.c_str(), expt_error_presentTrial/100.0);
+		sequencer.dspFaust.setParamValue(apString.c_str(), apVal_Final);
 
 		else
 		{
-			// INSERT SPECIFIC MAPPING CODE
+			if (audioParams.audioParam_ObjectArray[block_CurrentIdx].name == "M_Tempo")
+				sequencer.tempoTickInc.ap_forSkew_1D = pow(1 - expt_error_presentTrial / 100.0, mapOrder);
+
+			if (audioParams.audioParam_ObjectArray[block_CurrentIdx].name == "M_Pitch")
+				sequencer.AP_Val = pow(1 - expt_error_presentTrial / 100.0, mapOrder);
 		}
 	}
 
@@ -406,8 +415,19 @@ public:
 
 	void resetAndConfigureAP()
 	{
-		//RESET ALL AP - INSERT FUNCTION
-		
+		std::string apString_TEMP = "";
+	
+		for (int i = 0; i < audioParams.num_audioParams; i++)
+		{
+			// RESET FAUST APs
+			apString_TEMP = (apStrings.baseName + apStrings.SonificationNames[block_CurrentIdx]).toStdString();
+			sequencer.dspFaust.setParamValue(apString_TEMP.c_str(), 0);
+			
+			// RESET JUCE APs
+			sequencer.tempoTickInc.ap_forSkew_1D = 1;
+			sequencer.AP_Val = expt_error_presentTrial / 100.0;
+		}
+
 		//CHOOSE WHETHER TRADITIONAL OR MUSICAL
 		if (block_CurrentIdx < 5)
 		{
@@ -428,10 +448,23 @@ public:
 	void loadRandomMusicFile()
 	{
 		String path = "";
+		String appPath = "";
 		File forAppDirectory;
-		String appPath = forAppDirectory.getSpecialLocation
-		(File::currentApplicationFile).getFullPathName().upToLastOccurrenceOf("\\", false, true)
-			+ "\\MIDI Library\\";
+		if (audioParams.audioParam_ObjectArray[block_CurrentIdx].name == "M_Pitch")
+		{
+			sequencer.musicMode = 3;
+			appPath = forAppDirectory.getSpecialLocation
+			(File::currentApplicationFile).getFullPathName().upToLastOccurrenceOf("\\", false, true)
+				+ "\\MIDI Inbuilt Library\\";
+		}
+
+		else
+		{
+			sequencer.musicMode = 1;
+			appPath = forAppDirectory.getSpecialLocation
+			(File::currentApplicationFile).getFullPathName().upToLastOccurrenceOf("\\", false, true)
+				+ "\\MIDI Library\\";
+		}
 		File currentFile;
 
 		auto dir_Base = File(appPath);
@@ -440,7 +473,12 @@ public:
 		songFiles_Base.sort();
 		int randomSongIdx = randGen.nextInt(numSongs - 1);
 		currentFile = songFiles_Base.getUnchecked(randomSongIdx);
-		path = appPath + "\\" + currentFile.getFileNameWithoutExtension() + ".mid";
+
+		if (audioParams.audioParam_ObjectArray[block_CurrentIdx].name == "M_Pitch")
+			path = appPath + "\\4.mid";
+
+		else
+			path = appPath + "\\" + currentFile.getFileNameWithoutExtension() + ".mid";
 
 		sequencer.loadNewFile_MIDI(path);
 		sequencer.togglePlayPause();

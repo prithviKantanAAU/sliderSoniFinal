@@ -99,27 +99,9 @@ public:
 			noteNum -= scales[scaleID2][degreeFound];
 
 		// MEL DEGREE SONIFY
-		if ((APName_Soni == "Mel Degree") && trackIndex == 5)
+		if ((APName_Soni == "M_Pitch") && trackIndex == 5)
 		{
 			degreeFound = (int)(degreeFound + mapVal * 16);
-			octaveInc = (short)(degreeFound / 8);
-			octaveNum += octaveInc;
-			degreeFound %= 8;
-		}
-
-		// MEL DEGREE SONIFY
-		if ((X_2D_AP_Name == "Mel Degree") && trackIndex == 5)
-		{
-			degreeFound = (int)(degreeFound + apVal_2D_X * 16);
-			octaveInc = (short)(degreeFound / 8);
-			octaveNum += octaveInc;
-			degreeFound %= 8;
-		}
-
-		// MEL DEGREE SONIFY
-		if ((Y_2D_AP_Name == "Mel Degree") && trackIndex == 5)
-		{
-			degreeFound = (int)(degreeFound + apVal_2D_Y * 16);
 			octaveInc = (short)(degreeFound / 8);
 			octaveNum += octaveInc;
 			degreeFound %= 8;

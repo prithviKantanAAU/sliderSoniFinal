@@ -398,7 +398,7 @@ void SliderSonificationFinalAudioProcessorEditor::resized()
 	// SCREEN 4
 	trainingMessage.setBounds(0, 140, 1200, 40);
 	task.setBounds(10, 200, 1180, 30);
-	targetFound.setBounds(0, 230, 1200, 30);
+	targetFound.setBounds(400, 230, 400, 30);
 	resetTarget.setBounds(1040, 230, 140, 25);
 
 	// SCREEN 5

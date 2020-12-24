@@ -39,12 +39,12 @@ public:
 
 		// 6
 		audioParam_ObjectArray[5].set_nameTypeAddress("M_Pitch", 6, 2);
-		audioParam_ObjectArray[5].initializeSoniParams(1, 0, 1, 0, 0, 100, 0);
+		audioParam_ObjectArray[5].initializeSoniParams(2, 0, 1, 0, 0, 100, 0);
 		num_audioParams++;
 
 		// 7
 		audioParam_ObjectArray[6].set_nameTypeAddress("M_Tempo", 7, 2);
-		audioParam_ObjectArray[6].initializeSoniParams(1, 0, 1, 0, 0, 100, 0);
+		audioParam_ObjectArray[6].initializeSoniParams(3, 0, 1, 0, 0, 100, 0);
 		num_audioParams++;
 
 		// 8

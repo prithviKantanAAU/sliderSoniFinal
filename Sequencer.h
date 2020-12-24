@@ -107,7 +107,7 @@ public:
 	
 	double lastPulseTime = 0.0;									// Last 16th Pulse Time
 	double nextPulseTime = 0.0;									// Next 16th Pulse Time
-	double ticksPerMS = 1.0;									// MIDI Ticks per ms
+	double ticksPerMS = 2.0;									// MIDI Ticks per ms
 	long double midiTicksElapsed = 0.0;								// #MIDI Ticks elapsed
 	int midiTickIncrement = 240;								// MIDI Tick Increment per 16th note
 	double songProgress = 0;									// Song Process Fraction -> Sequencer
