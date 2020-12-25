@@ -53,6 +53,10 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 	int sess = experimentControl.session_Completed;
 	int blk = experimentControl.block_Completed;
 	int trial = experimentControl.trial_Current;
+
+	if (experimentControl.timeElapsed_presentScreen < experimentControl.time_minOnScreen)
+		return;
+
 	experimentControl.screensElapsed++;
 
 	switch (scr)
@@ -137,6 +141,7 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		experimentControl.idx_Screen = 5;
 	}
 
+	experimentControl.timeElapsed_presentScreen = 0;
 	experimentControl.overallProgress = (float)experimentControl.screensElapsed /
 		experimentControl.totalScreens;
 };

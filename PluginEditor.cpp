@@ -224,12 +224,12 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	// SCREEN 6
 	addAndMakeVisible(pleasantness);
 	addAndMakeVisible(pleasantnessLabel);
-	pleasantness.setRange(1, 7);
+	pleasantness.setRange(1, 7, 1);
 	pleasantness.setValue(4);
 	pleasantness.setNumDecimalPlacesToDisplay(0);
-	pleasantness.setColour(pleasantness.trackColourId, Colours::yellow);
-	pleasantness.setColour(pleasantness.backgroundColourId, Colours::white);
-	pleasantness.setColour(pleasantness.thumbColourId, Colours::blue);
+	pleasantness.setColour(pleasantness.textBoxBackgroundColourId, Colours::yellow);
+	pleasantness.setColour(pleasantness.textBoxTextColourId, Colours::black);
+	pleasantness.setSliderStyle(Slider::IncDecButtons);
 	pleasantnessLabel.setText(uiStrings.pleasantnessText, dontSendNotification);
 	pleasantnessLabel.setJustificationType(juce::Justification::centred);
 	pleasantnessLabel.setFont(juce::Font(24.0f, juce::Font::bold));
@@ -240,12 +240,12 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 
 	addAndMakeVisible(longevity);
 	addAndMakeVisible(longevityLabel);
-	longevity.setRange(1, 7);
+	longevity.setRange(1, 7, 1);
 	longevity.setValue(4);
 	longevity.setNumDecimalPlacesToDisplay(0);
-	longevity.setColour(longevity.trackColourId, Colours::yellow);
-	longevity.setColour(longevity.backgroundColourId, Colours::white);
-	longevity.setColour(longevity.thumbColourId, Colours::blue);
+	longevity.setColour(longevity.textBoxBackgroundColourId, Colours::yellow);
+	longevity.setColour(longevity.textBoxTextColourId, Colours::black);
+	longevity.setSliderStyle(Slider::IncDecButtons);
 	longevityLabel.setText(uiStrings.longevityText, dontSendNotification);
 	longevityLabel.setJustificationType(juce::Justification::centred);
 	longevityLabel.setFont(juce::Font(24.0f, juce::Font::bold));
@@ -339,6 +339,8 @@ void SliderSonificationFinalAudioProcessorEditor::toggleScreen(short newScreenId
 		task.setValue(0);
 		break;
 	case 6:											// Subjective Data Screen
+		pleasantness.setValue(4);
+		longevity.setValue(4);
 		pleasantnessLabel.setVisible(true);
 		pleasantness.setVisible(true);
 		longevity.setVisible(true);
@@ -407,9 +409,9 @@ void SliderSonificationFinalAudioProcessorEditor::resized()
 
 	// SCREEN 6
 	pleasantnessLabel.setBounds(0, 100, 1200, 50);
-	pleasantness.setBounds(10, 150, 1180, 30);
+	pleasantness.setBounds(400, 150, 400, 30);
 	longevityLabel.setBounds(0, 250, 1200, 50);
-	longevity.setBounds(10, 300, 1180, 30);
+	longevity.setBounds(400, 300, 400, 30);
 
 	// SCREEN 7
 	thankYou.setBounds(0, 160, 1200, 80);

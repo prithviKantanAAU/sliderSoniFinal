@@ -70,6 +70,8 @@ public:
 	short trial_Current = 0;											// 0 - 1 - 2 - 3
 
 	double timeElapsed_SEC_FLOAT = 0;
+	double timeElapsed_presentScreen = 0;
+	double time_minOnScreen = 2;
 	int timeElapsed_MIN = 0;
 	int timeElapsed_SEC = 0;
 	double timeRemaining = 0;
@@ -162,7 +164,7 @@ public:
 		float mapOrder = audioParams.audioParam_ObjectArray[block_CurrentIdx].mappingOrder;
 		float apVal_Final = pow(expt_error_presentTrial / 100.0, mapOrder);
 		
-		if (expt_error_presentTrial < 1)
+		if (expt_error_presentTrial < 0.2)
 			apVal_Final = 0;
 
 		// MAP DSPFAUST
@@ -287,6 +289,7 @@ public:
 	void updateTimeVariables(double incrementSec)
 	{
 		timeElapsed_SEC_FLOAT += incrementSec;
+		timeElapsed_presentScreen += incrementSec;
 		int seconds_Int = (int)timeElapsed_SEC_FLOAT;
 		timeElapsed_MIN = seconds_Int / 60;
 		timeElapsed_SEC = seconds_Int % 60;
@@ -322,6 +325,7 @@ public:
 			{
 				block_Order[i][j] = getNewRandomIndex(block_Total, j, block_Order[i]);
 			}
+			block_Order[i][0] = 5;
 		}
  	}
 
@@ -450,12 +454,14 @@ public:
 		String path = "";
 		String appPath = "";
 		File forAppDirectory;
+		int randomInbuiltIdx = 0;
 		if (audioParams.audioParam_ObjectArray[block_CurrentIdx].name == "M_Pitch")
 		{
 			sequencer.musicMode = 3;
 			appPath = forAppDirectory.getSpecialLocation
 			(File::currentApplicationFile).getFullPathName().upToLastOccurrenceOf("\\", false, true)
 				+ "\\MIDI Inbuilt Library\\";
+			randomInbuiltIdx = 1 + randGen.nextInt(4);
 		}
 
 		else
@@ -471,18 +477,34 @@ public:
 		int numSongs = dir_Base.getNumberOfChildFiles(2, "*.mid");
 		auto songFiles_Base = dir_Base.findChildFiles(2, false, "*.mid");
 		songFiles_Base.sort();
-		int randomSongIdx = randGen.nextInt(numSongs - 1);
+		int randomSongIdx = randGen.nextInt(numSongs);
 		currentFile = songFiles_Base.getUnchecked(randomSongIdx);
 
 		if (audioParams.audioParam_ObjectArray[block_CurrentIdx].name == "M_Pitch")
-			path = appPath + "\\4.mid";
+			path = appPath + "\\"+ String(randomInbuiltIdx) +".mid";
 
 		else
 			path = appPath + "\\" + currentFile.getFileNameWithoutExtension() + ".mid";
 
 		sequencer.loadNewFile_MIDI(path);
 		sequencer.togglePlayPause();
+		setTempo(setRandomTempo());
 	}
+
+	float setRandomTempo()
+	{
+		return 80 + randGen.nextInt(50);
+	}
+
+	void setTempo(float value)
+	{
+		sequencer.tempo = value;
+		double intervalMs = 60000 / sequencer.tempo * 0.25;
+		double intervalMultiplier = sequencer.isTripletMode ? 4.0 / 3.0 : 1.0;
+		sequencer.ticksPerMS = 960 / (4 * intervalMs) * intervalMultiplier;
+		sequencer.dspFaust.setParamValue(sequencer.faustStrings.Tempo.c_str(), value);
+		sequencer.musicPhase.setPhaseInc(sequencer.tempo, 1000);
+	};
 
 	void createAndConfigFile()
 	{
