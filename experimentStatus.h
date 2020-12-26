@@ -325,7 +325,7 @@ public:
 			{
 				block_Order[i][j] = getNewRandomIndex(block_Total, j, block_Order[i]);
 			}
-			block_Order[i][0] = 5;
+			//block_Order[i][0] = 8;									/// To Test Strategies
 		}
  	}
 

@@ -55,7 +55,7 @@ private:
 
 		if (processor.experimentControl.idx_Screen == 4)
 		{
-			if (processor.experimentControl.expt_error_presentTrial < 1)
+			if (processor.experimentControl.expt_error_presentTrial < 0.2)
 				targetFound.setVisible(true);
 			else  targetFound.setVisible(false);
 		}
