@@ -17,19 +17,19 @@ public:
 			{
 				for (int s = 0; s < session_Total; s++)
 				{
-					expt_targets[t][b][s] = t;
-					expt_error[t][b][s] = b;
-					expt_time[t][b][s] = 10;
-					expt_overshoots[t][b][s] = t;
-					rating_pleasantness[b][s] = b;
-					rating_longevity[b][s] = b - 1;
+					expt_targets[t][b][s] = 0;
+					expt_error[t][b][s] = 0;
+					expt_time[t][b][s] = 0;
+					expt_overshoots[t][b][s] = 0;
+					rating_pleasantness[b][s] = 4;
+					rating_longevity[b][s] = 4;
 				}
 
 				for (int w = 0; w < 10000; w++)
 				{
-					trajectory_sliderPos_FAST[t][b][w] = w;
-					trajectory_sliderPos_PRECISE[t][b][w] = w + 1;
-					trajectory_sliderPos_OVERSHOOT[t][b][w] = w + 2;
+					trajectory_sliderPos_FAST[t][b][w] = 0;
+					trajectory_sliderPos_PRECISE[t][b][w] = 0;
+					trajectory_sliderPos_OVERSHOOT[t][b][w] = 0;
 				}
 			}
 		}
@@ -71,7 +71,7 @@ public:
 
 	double timeElapsed_SEC_FLOAT = 0;
 	double timeElapsed_presentScreen = 0;
-	double time_minOnScreen = 2;
+	double time_minOnScreen = 0.5;
 	int timeElapsed_MIN = 0;
 	int timeElapsed_SEC = 0;
 	double timeRemaining = 0;
@@ -143,10 +143,13 @@ public:
 
 	void beginTrial()
 	{
+		expt_error_presentTrial = 0;
+		expt_time_presentTrial = 0;
+		expt_overshoots_presentTrial = 0;
+		trajectory_writeIdx = 0;
 		isTrialON = true;
 		getNewTargetValue();
 		expt_targets[trial_Current][block_CurrentIdx][session_CurrentIdx] = expt_target_presentTrial;
-		trajectory_writeIdx = 0;
 		timeRemaining = timeTotal_Sessionwise[session_CurrentIdx];
 		sequencer.stopMusic();
 		loadRandomMusicFile();
@@ -191,6 +194,7 @@ public:
 	void endTrial()
 	{
 		sequencer.stopMusic();
+		val_taskSlider = 0;
 		// STORE Error, Time, Overshoots
 		expt_error[trial_Current][block_CurrentIdx][session_CurrentIdx] = expt_error_presentTrial;
 		expt_overshoots[trial_Current][block_CurrentIdx][session_CurrentIdx] = expt_overshoots_presentTrial;
@@ -200,8 +204,9 @@ public:
 		expt_time_presentTrial = 0;
 		expt_overshoots_presentTrial = 0;
 
+		trial_Current++;
 		// INCREMENT Trial Num
-		if (trial_Current < (trial_Total - 1))
+		if (trial_Current <= (trial_Total - 1))
 		{
 			if (session_CurrentIdx == 0)
 			{
@@ -210,7 +215,9 @@ public:
 			}
 
 			else
+			{
 				beginTrial();
+			}
 		}
 		else
 		{
@@ -218,7 +225,7 @@ public:
 			isTrialON = false;
 			idx_Screen = 6;
 		}
-		trial_Current =	(trial_Current + 1) % (trial_Total);
+		trial_Current %= trial_Total;
 	}
 
 	void updateCompletedBlock()
@@ -265,7 +272,7 @@ public:
 		}
 	}
 
-	// CALL ONCE EVERY 10 ms
+	// CALL ONCE EVERY 20 ms
 	void storeSliderTrajectoryVal()
 	{
 		if (isTrialON)
@@ -325,14 +332,15 @@ public:
 			{
 				block_Order[i][j] = getNewRandomIndex(block_Total, j, block_Order[i]);
 			}
-			//block_Order[i][0] = 8;									/// To Test Strategies
+			/*block_Order[i][0] = 8;									/// To Test Strategies
+			session_Order[0] = 1;*/
 		}
  	}
 
 	Random randGen;
 	int getNewRandomIndex(int total, int totalElapsed, short *elapsedIndices)
 	{
-		int randomIndex = randGen.nextInt(total - 1) + 1;
+		int randomIndex = randGen.nextInt(total);
 		bool alreadyDone = false;
 
 		for (int i = 0; i < total; i++)

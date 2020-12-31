@@ -38,6 +38,8 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	toggleScreenIdx.onValueChange = [this]
 	{
 		processor.experimentControl.idx_Screen = (int) toggleScreenIdx.getValue();
+		/*processor.experimentControl.saveLog_EXPT();
+		processor.experimentControl.saveLog_TRAJ();*/
 	};
 
 	// EXPERIMENT LABELS

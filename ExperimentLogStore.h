@@ -119,24 +119,27 @@ public:
 	float minMax(float Value[4][10][3], float *minValue, float *maxValue)
 	{
 
-		*minValue = Value[0][0][0];
-		*maxValue = Value[0][0][0];
+		*minValue = 0;
+		*maxValue = 0;
 
-		for (int i = 0; i < 4, i++;)
-			for (int j = 0; j < 10, j++;)
-				for (int k = 0; k < 3, k++;)
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 10; j++)
+			{
+				for (int k = 0; k < 3; k++)
 				{
-					if (*minValue < Value[i][j][k])
+					if (Value[i][j][k] < *minValue)
 					{
 						*minValue = Value[i][j][k];
 					}
 
-					else if (*maxValue > Value[i][j][k])
+					if (Value[i][j][k] > *maxValue)
 					{
-
 						*maxValue = Value[i][j][k];
 					}
 				}
+			}
+		}
 		return 0.0;
 	}
 };

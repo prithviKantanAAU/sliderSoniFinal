@@ -113,11 +113,14 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		{
 			if (experimentControl.session_CurrentIdx == 0)
 			{
+				experimentControl.val_taskSlider = 0;
 				experimentControl.countInTimeLeft = experimentControl.countInTimeMax;
+				experimentControl.sequencer.stopMusic();
 				experimentControl.idx_Screen = 8;
 			}
 			else
 			{
+				experimentControl.val_taskSlider = 0;
 				experimentControl.beginTrial();
 				experimentControl.idx_Screen = 5;
 			}
@@ -128,6 +131,9 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		break;
 	case 6:				// SUBJECTIVE RATINGS SCREEN
 		experimentControl.endBlock();
+		/*experimentControl.createAndConfigFile();
+		experimentControl.saveLog_EXPT();
+		experimentControl.saveLog_TRAJ();*/
 		break;
 	case 7:				// CONCLUSION
 		if (JUCEApplicationBase::isStandaloneApp())

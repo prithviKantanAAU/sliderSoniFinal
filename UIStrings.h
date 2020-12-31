@@ -68,7 +68,7 @@ public:
 	String participant_HearingLoss_Options[3] =
 	{
 		"None",
-		"Mild/Moderate",
+		"Mild to Moderate",
 		"Severe"
 	};
 
