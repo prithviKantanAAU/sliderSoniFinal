@@ -208,8 +208,9 @@ public:
 		// INCREMENT Trial Num
 		if (trial_Current <= (trial_Total - 1))
 		{
-			if (session_CurrentIdx == 0)
+			if (session_CurrentIdx <= 5)
 			{
+				isTrialON = false;
 				countInTimeLeft = countInTimeMax;
 				idx_Screen = 8;
 			}
@@ -335,6 +336,7 @@ public:
 			/*block_Order[i][0] = 8;									/// To Test Strategies
 			session_Order[0] = 1;*/
 		}
+		/*session_Order[0] = 0;*/
  	}
 
 	Random randGen;
@@ -501,7 +503,8 @@ public:
 
 	float setRandomTempo()
 	{
-		return 80 + randGen.nextInt(50);
+		//return 80 + randGen.nextInt(50);
+		return 120;
 	}
 
 	void setTempo(float value)

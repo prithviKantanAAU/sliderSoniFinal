@@ -79,7 +79,7 @@ public:
 		"Right"
 	};
 
-	String continueText_Screenwise[8] =
+	String continueText_Screenwise[9] =
 	{
 		"Press SPACE to begin the experiment.",
 		"Press SPACE to proceed.",
@@ -88,7 +88,8 @@ public:
 		"Press SPACE to begin the testing phase.",
 		"Press SPACE when you have located the target.",
 		"Press SPACE to proceed.",
-		"Press SPACE to conclude the experiment."
+		"Press SPACE to conclude the experiment.",
+		"Get Ready!"
 	};
 
 

@@ -93,7 +93,7 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 			}
 			else
 			{
-				if (experimentControl.session_CurrentIdx == 0)			// IF SPEED SESSION, COUNT IN
+				if (experimentControl.session_CurrentIdx <= 5)			// IF SPEED SESSION, COUNT IN
 				{
 					experimentControl.countInTimeLeft = experimentControl.countInTimeMax;
 					experimentControl.idx_Screen = 8;
@@ -111,7 +111,7 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		experimentControl.isTrainingON = false;
 		if (isAllOK)
 		{
-			if (experimentControl.session_CurrentIdx == 0)
+			if (experimentControl.session_CurrentIdx <= 5)
 			{
 				experimentControl.val_taskSlider = 0;
 				experimentControl.countInTimeLeft = experimentControl.countInTimeMax;
@@ -145,8 +145,9 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 	}
 
 	experimentControl.timeElapsed_presentScreen = 0;
-	experimentControl.overallProgress = (float)experimentControl.screensElapsed /
-		experimentControl.totalScreens;
+	experimentControl.overallProgress = 
+		(float)(experimentControl.session_Completed * 40 + experimentControl.block_Completed * 4) /
+		120;
 };
 
 const String SliderSonificationFinalAudioProcessor::getName() const

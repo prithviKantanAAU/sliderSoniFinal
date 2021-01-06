@@ -213,7 +213,7 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	addAndMakeVisible(testingMessage);
 	testingMessage.setJustificationType(juce::Justification::centred);
 	testingMessage.setFont(juce::Font(24.0f, juce::Font::bold));
-	testingMessage.setText(uiStrings.isTrial, dontSendNotification);
+	trial_Present.setFont(juce::Font(16.0f, juce::Font::bold));
 
 	addAndMakeVisible(timeRemaining);
 	timeRemaining.setJustificationType(juce::Justification::centred);
@@ -336,6 +336,8 @@ void SliderSonificationFinalAudioProcessorEditor::toggleScreen(short newScreenId
 		break;
 	case 5:											// Trial Screen
 		timeRemaining.setVisible(true);
+		testingMessage.setText(uiStrings.session_Instructions[processor.experimentControl.session_CurrentIdx]
+		, dontSendNotification);
 		testingMessage.setVisible(true);
 		task.setVisible(true);
 		task.setValue(0);
@@ -371,7 +373,7 @@ void SliderSonificationFinalAudioProcessorEditor::resized()
 	screenHeader.setBounds(0, 0, 1200, 45);
 	warning.setBounds(0, 330, 1200, 25);
 
-	toggleScreenIdx.setBounds(10, 10, 200, 20);
+	//toggleScreenIdx.setBounds(10, 10, 200, 20);
 	timeElapsed_Total.setBounds(1030, 10, 170, 20);
 	session_Present.setBounds(1030, 30, 170, 20);
 	block_Present.setBounds(1030, 50, 170, 20);

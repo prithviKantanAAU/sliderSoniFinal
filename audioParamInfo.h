@@ -49,7 +49,7 @@ public:
 
 		// 8
 		audioParam_ObjectArray[7].set_nameTypeAddress("M_Synchronicity", 8, 1);
-		audioParam_ObjectArray[7].initializeSoniParams(0.5, 0, 1, 0, 0, 100, 0);
+		audioParam_ObjectArray[7].initializeSoniParams(0.6, 0, 1, 0, 0, 100, 0);
 		num_audioParams++;
 
 		// 9
