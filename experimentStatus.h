@@ -542,19 +542,40 @@ public:
 		bool isSubjRatingDuplicate = false;
 
 		// Participant Metadata
-		data = participantDetails.name + "," + participantDetails.age + "," + participantDetails.hearingLoss
+		data = participantDetails.name + "," + participantDetails.age + "," + participantDetails.gender + "," + participantDetails.hearingLoss
 			+ "," + participantDetails.hand + ",";
-		exptLogStore.save_Expt_LogLine(data);
+		exptLogStore.save_Expt_LogLine(data,exptLogStore.expt_formatSpecifier);
 
+		data = String(session_Order[0]) + "," + String(session_Order[1]) + "," + String(session_Order[2]) + ",";
+		exptLogStore.save_Expt_LogLine(data, exptLogStore.format_expt_sessionOrder);
+		data = "";
+
+		for (int s = 0; s < session_Total; s++)
+		{
+			data =
+				String(block_Order[s][0]) + "," +
+				String(block_Order[s][1]) + "," +
+				String(block_Order[s][2]) + "," +
+				String(block_Order[s][3]) + "," +
+				String(block_Order[s][4]) + "," +
+				String(block_Order[s][5]) + "," +
+				String(block_Order[s][6]) + "," +
+				String(block_Order[s][7]) + "," +
+				String(block_Order[s][8]) + "," +
+				String(block_Order[s][9]) + ",";
+			exptLogStore.save_Expt_LogLine(data, exptLogStore.format_expt_blockOrder);
+		}
+
+		data = "";
 		for (int s = 0; s < session_Total; s++)							// FOR EACH SESSION
 		{
 			data = exptLogStore.names_Sessions[s] + ",";
-			exptLogStore.save_Expt_LogLine(data);
+			exptLogStore.save_Expt_LogLine(data, exptLogStore.expt_formatSpecifier);
 
 			for (int v = 0; v < 5; v++)									// FOR EACH VARIABLE
 			{
 				data = exptLogStore.names_Variables[v] + ",";
-				exptLogStore.save_Expt_LogLine(data);
+				exptLogStore.save_Expt_LogLine(data, exptLogStore.expt_formatSpecifier);
 
 				for (int t = 0; t < trial_Total; t++)					// FOR EACH TRIAL
 				{
@@ -582,7 +603,7 @@ public:
 					}
 					isSubjRatingDuplicate = (v > 2 && t > 0);
 					if (!isSubjRatingDuplicate) 
-						exptLogStore.save_Expt_LogLine(data);
+						exptLogStore.save_Expt_LogLine(data, exptLogStore.expt_formatSpecifier);
 				}
 			}
 		}

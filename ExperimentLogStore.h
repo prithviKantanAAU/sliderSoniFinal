@@ -22,6 +22,12 @@ public:
 	String names_Sessions[3] = { "Session 1", "Session 2", "Session 3" };
 	String names_Variables[5] = { "Error", "Time", "Overshoots", "Pleasantness Rating", "Longevity Rating" };
 
+	std::string format_expt_sessionOrder =
+		"%s,%s,%s,\n";
+
+	std::string format_expt_blockOrder =
+		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,\n";
+
 	std::string expt_formatSpecifier =
 		"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,\n";
 
@@ -30,7 +36,7 @@ public:
 		"%s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s, %s,%s,%s,%s,"
 		"%s,%s,%s,%s, %s,%s,%s,%s, \n";
 
-	void save_Expt_LogLine(String commaSeparatedData)
+	void save_Expt_LogLine(String commaSeparatedData, std::string formatSpecifier)
 	{
 		// FIND NUMBER OF DATA VALUES PRESENT
 		int numDataValues = countFreq(",", commaSeparatedData.toStdString());
@@ -46,7 +52,7 @@ public:
 		// WRITE INTO LOG
 		fprintf(
 			fileObj[0],
-			expt_formatSpecifier.c_str(),
+			formatSpecifier.c_str(),
 			data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]
 		);
 	};

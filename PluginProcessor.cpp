@@ -70,6 +70,11 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 		if (isAllOK)
 		{
 			experimentControl.generateExptOrder();
+			
+			//REMOVE WHEN TESTING DONE
+			experimentControl.createAndConfigFile();
+			experimentControl.saveLog_EXPT();
+			
 			experimentControl.beginSession();
 			experimentControl.idx_Screen = 2;
 		}
