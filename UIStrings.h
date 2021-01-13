@@ -4,7 +4,7 @@
 class UIStrings
 {
 public:
-	
+
 	String screenHeaders[9] =
 	{
 		"Introduction",
@@ -31,9 +31,18 @@ public:
 	};
 
 	String welcomeText =
-	"Welcome. Your task is to find a point on a horizontal line" 
-		" using different audio guidance types. \n \n" "Next, you will be asked to rate their "
-		"aesthetic qualities.";
+		"Welcome. Your task is to find a target point on a horizontal line"
+		" using sound. \n \n" "The goal of the experiment is to compare "
+		"the guidance capabilities of different sound strategies.";
+
+	String detailedInstructions =
+		"The experiment has 3 sessions - SPEED, PRECISION and TARGET OVERSHOOTS. \n"
+		"In each session, there are 10 blocks - each contains ONE sound guidance strategy. \n\n"
+		"Each block has a training phase and FOUR tests where you must locate a random target."
+		"You must then rate the aesthetic qualities of that strategy (e.g. pleasantness). \n\n"
+		"There are FIVE musical strategies and FIVE non-musical strategies. \n"
+		"All sessions and blocks are presented in a random order";
+
 
 	String timeElapsedTotal =
 		"Total Time: ";
@@ -46,6 +55,9 @@ public:
 
 	String trial_Current =
 		"Current Trial: ";
+
+	String targetRangeText =
+		"THE TARGET LIES IN THIS AREA";
 
 	String isTraining =
 		"This is the training phase, where you can try to find a target as many times as you like.";
@@ -79,25 +91,26 @@ public:
 		"Right"
 	};
 
-	String continueText_Screenwise[9] =
+	String continueText_Screenwise[10] =
 	{
 		"Press SPACE to begin the experiment.",
-		"Press SPACE to proceed.",
+		"Press SPACE to commence the first session.",
 		"Press SPACE to begin the session.",
-		"Press SPACE to proceed.",
+		"Press SPACE to begin the training phase.",
 		"Press SPACE to begin the testing phase.",
 		"Press SPACE when you have located the target.",
-		"Press SPACE to proceed.",
+		"Press SPACE to begin the next block.",
 		"Press SPACE to conclude the experiment.",
-		"Get Ready!"
+		"Get Ready!",
+		"Press SPACE to start filling in your details."
 	};
 
 
 	String session_Instructions[3] =
 	{
-		"Find the target as FAST as possible.",
-		"Find the target as PRECISELY as possible.",
-		"Find the target WITHOUT PASSING IT."
+		"Find the target as FAST as possible. \n\n NOTE that there is a time limit of 5 SECONDS.",
+		"Find the target as PRECISELY as possible. \n\n There is no time limit.",
+		"Find the target WITHOUT PASSING IT. \n\n There is no time limit."
 	};
 
 	String block_Names[10] =

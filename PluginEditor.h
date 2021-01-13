@@ -145,6 +145,8 @@ private:
 	//  5: Trial Screen
 	//  6: Subjective Data Screen
 	//  7: Conclusion Screen
+	//  8: Count In
+	//  9: Experiment Description
 
 	// Screen 2
 	Label sessionDescription;
@@ -161,6 +163,7 @@ private:
 	Label trainingMessage;
 	TextButton resetTarget;
 	Label targetFound;
+	Label targetRangeIndicator;
 
 	// Screen 5
 	Label timeRemaining;
@@ -180,6 +183,9 @@ private:
 
 	// Screen 8
 	Label countIn;
+
+	// Screen 9
+	Label detailedInstructions;
 
 	void hideScreenSpecificUI()
 	{
@@ -213,10 +219,12 @@ private:
 		trainingMessage.setVisible(false);
 		resetTarget.setVisible(false);
 		targetFound.setVisible(false);
+		targetRangeIndicator.setVisible(false);
 
 		// Screen 5
 		testingMessage.setVisible(false);
 		timeRemaining.setVisible(false);
+		targetRangeIndicator.setVisible(false);
 
 		// Screen 6
 		pleasantnessLabel.setVisible(false);
@@ -229,6 +237,10 @@ private:
 
 		// Screen 8
 		countIn.setVisible(false);
+
+		// Screen 9
+		continuePrompt.setVisible(false);
+		detailedInstructions.setVisible(false);
 	};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SliderSonificationFinalAudioProcessorEditor)

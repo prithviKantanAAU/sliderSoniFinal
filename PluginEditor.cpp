@@ -207,7 +207,13 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	targetFound.setText("TARGET FOUND",dontSendNotification);
 	targetFound.setJustificationType(juce::Justification::centred);
 	targetFound.setFont(juce::Font(24.0f, juce::Font::bold));
-	targetFound.setColour(targetFound.textColourId, Colours::green);
+	targetFound.setColour(targetFound.backgroundColourId, Colours::blue);
+
+	addAndMakeVisible(targetRangeIndicator);
+	targetRangeIndicator.setColour(targetRangeIndicator.backgroundColourId, Colours::yellow);
+	targetRangeIndicator.setColour(targetRangeIndicator.textColourId, Colours::black);
+	targetRangeIndicator.setText(uiStrings.targetRangeText, dontSendNotification);
+	targetRangeIndicator.setJustificationType(juce::Justification::centred);
 
 	// SCREEN 5
 	addAndMakeVisible(testingMessage);
@@ -229,9 +235,10 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	pleasantness.setRange(1, 7, 1);
 	pleasantness.setValue(4);
 	pleasantness.setNumDecimalPlacesToDisplay(0);
+	pleasantness.setColour(pleasantness.trackColourId, Colours::lightgreen);
+	pleasantness.setColour(pleasantness.backgroundColourId, Colours::red);
 	pleasantness.setColour(pleasantness.textBoxBackgroundColourId, Colours::yellow);
 	pleasantness.setColour(pleasantness.textBoxTextColourId, Colours::black);
-	pleasantness.setSliderStyle(Slider::IncDecButtons);
 	pleasantnessLabel.setText(uiStrings.pleasantnessText, dontSendNotification);
 	pleasantnessLabel.setJustificationType(juce::Justification::centred);
 	pleasantnessLabel.setFont(juce::Font(24.0f, juce::Font::bold));
@@ -245,9 +252,10 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	longevity.setRange(1, 7, 1);
 	longevity.setValue(4);
 	longevity.setNumDecimalPlacesToDisplay(0);
+	longevity.setColour(longevity.trackColourId, Colours::lightgreen);
+	longevity.setColour(longevity.backgroundColourId, Colours::red);
 	longevity.setColour(longevity.textBoxBackgroundColourId, Colours::yellow);
 	longevity.setColour(longevity.textBoxTextColourId, Colours::black);
-	longevity.setSliderStyle(Slider::IncDecButtons);
 	longevityLabel.setText(uiStrings.longevityText, dontSendNotification);
 	longevityLabel.setJustificationType(juce::Justification::centred);
 	longevityLabel.setFont(juce::Font(24.0f, juce::Font::bold));
@@ -266,6 +274,11 @@ void SliderSonificationFinalAudioProcessorEditor::configureUI_Initial()
 	addAndMakeVisible(countIn);
 	countIn.setJustificationType(juce::Justification::centred);
 	countIn.setFont(juce::Font(24.0f, juce::Font::bold));
+
+	// SCREEN 9
+	addAndMakeVisible(detailedInstructions);
+	detailedInstructions.setText(uiStrings.detailedInstructions, dontSendNotification);
+	detailedInstructions.setFont(juce::Font(24.0f, juce::Font::bold));
 }
 
 void SliderSonificationFinalAudioProcessorEditor::timerCallback()
@@ -332,13 +345,15 @@ void SliderSonificationFinalAudioProcessorEditor::toggleScreen(short newScreenId
 		task.setVisible(true);
 		trainingMessage.setVisible(true);
 		resetTarget.setVisible(true);
+		targetRangeIndicator.setVisible(true);
 		task.setValue(0);
 		break;
 	case 5:											// Trial Screen
 		timeRemaining.setVisible(true);
-		testingMessage.setText(uiStrings.session_Instructions[processor.experimentControl.session_CurrentIdx]
+		testingMessage.setText("Your trial is being recorded."
 		, dontSendNotification);
 		testingMessage.setVisible(true);
+		targetRangeIndicator.setVisible(true);
 		task.setVisible(true);
 		task.setValue(0);
 		break;
@@ -356,6 +371,9 @@ void SliderSonificationFinalAudioProcessorEditor::toggleScreen(short newScreenId
 	case 8:
 		countIn.setVisible(true);
 		break;
+	case 9:
+		detailedInstructions.setVisible(true);
+		continuePrompt.setVisible(true);
 	}
 }
 
@@ -404,8 +422,9 @@ void SliderSonificationFinalAudioProcessorEditor::resized()
 	// SCREEN 4
 	trainingMessage.setBounds(0, 140, 1200, 40);
 	task.setBounds(10, 200, 1180, 30);
-	targetFound.setBounds(400, 230, 400, 30);
+	targetFound.setBounds(400, 285, 400, 30);
 	resetTarget.setBounds(1040, 230, 140, 25);
+	targetRangeIndicator.setBounds(595,225,359,15);
 
 	// SCREEN 5
 	testingMessage.setBounds(0, 140, 1200, 30);
@@ -422,4 +441,7 @@ void SliderSonificationFinalAudioProcessorEditor::resized()
 
 	// SCREEN 8
 	countIn.setBounds(0, 160, 1200, 80);
+
+	// SCREEN 9
+	detailedInstructions.setBounds(0, 0, 1000, 350);
 }

@@ -7894,10 +7894,10 @@ class mydsp : public dsp {
 	
 	virtual void buildUserInterface(UI* ui_interface) {
 		ui_interface->openVerticalBox("SliderSoniFinal");
-		ui_interface->addSoundfile("CR_SMPL", "{'D:\\GaitSonification\\Drum Samples\\Final Library\\CR_V1.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\CR_V2.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\CR_V3.wav'}", &fSoundfile6);
-		ui_interface->addSoundfile("HH_SMPL_V1", "{'D:\\GaitSonification\\Drum Samples\\Final Library\\HH_V1_1.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\HH_V1_2.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\HH_V1_3.wav'}", &fSoundfile4);
-		ui_interface->addSoundfile("HH_SMPL_V2", "{'D:\\GaitSonification\\Drum Samples\\Final Library\\HH_V2_1.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\HH_V2_2.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\HH_V2_3.wav'}", &fSoundfile5);
-		ui_interface->addSoundfile("K_SMPL", "{'D:\\GaitSonification\\Drum Samples\\Final Library\\K_V1.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\K_V2.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\K_V3.wav'}", &fSoundfile0);
+		ui_interface->addSoundfile("CR_SMPL", "{'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\CR_V1.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\CR_V2.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\CR_V3.wav'}", &fSoundfile6);
+		ui_interface->addSoundfile("HH_SMPL_V1", "{'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\HH_V1_1.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\HH_V1_2.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\HH_V1_3.wav'}", &fSoundfile4);
+		ui_interface->addSoundfile("HH_SMPL_V2", "{'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\HH_V2_1.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\HH_V2_2.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\HH_V2_3.wav'}", &fSoundfile5);
+		ui_interface->addSoundfile("K_SMPL", "{'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\K_V1.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\K_V2.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\K_V3.wav'}", &fSoundfile0);
 		ui_interface->openTabBox("Mapping_Tabs");
 		ui_interface->openVerticalBox("Comp_Section");
 		ui_interface->openHorizontalBox("Track 1");
@@ -8341,9 +8341,9 @@ class mydsp : public dsp {
 		ui_interface->closeBox();
 		ui_interface->closeBox();
 		ui_interface->closeBox();
-		ui_interface->addSoundfile("S_SMPL_V1", "{'D:\\GaitSonification\\Drum Samples\\Final Library\\S_V1_1.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\S_V1_2.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\S_V1_3.wav'}", &fSoundfile1);
-		ui_interface->addSoundfile("S_SMPL_V2", "{'D:\\GaitSonification\\Drum Samples\\Final Library\\S_V2_1.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\S_V2_2.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\S_V2_3.wav'}", &fSoundfile2);
-		ui_interface->addSoundfile("S_SMPL_V3", "{'D:\\GaitSonification\\Drum Samples\\Final Library\\S_V3_1.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\S_V3_2.wav';'D:\\GaitSonification\\Drum Samples\\Final Library\\S_V3_3.wav'}", &fSoundfile3);
+		ui_interface->addSoundfile("S_SMPL_V1", "{'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\S_V1_1.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\S_V1_2.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\S_V1_3.wav'}", &fSoundfile1);
+		ui_interface->addSoundfile("S_SMPL_V2", "{'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\S_V2_1.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\S_V2_2.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\S_V2_3.wav'}", &fSoundfile2);
+		ui_interface->addSoundfile("S_SMPL_V3", "{'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\S_V3_1.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\S_V3_2.wav';'C:\\Program Files (x86)\\SliderSoniExpt\\Drum Samples\\Final Library\\S_V3_3.wav'}", &fSoundfile3);
 		ui_interface->addCheckButton("Traditional", &fCheckbox0);
 		ui_interface->closeBox();
 	}

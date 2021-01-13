@@ -498,6 +498,7 @@ public:
 
 		sequencer.loadNewFile_MIDI(path);
 		sequencer.togglePlayPause();
+		sequencer.currentMusic.styles[sequencer.currentMusic.style_current].groove_current = 3;
 		setTempo(setRandomTempo());
 	}
 

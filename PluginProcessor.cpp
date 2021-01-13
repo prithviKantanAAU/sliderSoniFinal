@@ -19,6 +19,7 @@ SliderSonificationFinalAudioProcessor::SliderSonificationFinalAudioProcessor()
 SliderSonificationFinalAudioProcessor::~SliderSonificationFinalAudioProcessor()
 {
 	stopTimer();
+	experimentControl.sequencer.dspFaust.stop();
 }
 
 void SliderSonificationFinalAudioProcessor::hiResTimerCallback()
@@ -63,7 +64,7 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 	{
 	case 0:				// WELCOME SCREEN
 		isAllOK = true;
-		if (isAllOK) experimentControl.idx_Screen = 1;
+		if (isAllOK) experimentControl.idx_Screen = 9;
 		break;
 	case 1:				// PARTICIPANT DETAILS SCREEN
 		isAllOK = experimentControl.participantDetails.checkIfEntered(); 
@@ -72,8 +73,8 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 			experimentControl.generateExptOrder();
 			
 			//REMOVE WHEN TESTING DONE
-			experimentControl.createAndConfigFile();
-			experimentControl.saveLog_EXPT();
+			/*experimentControl.createAndConfigFile();
+			experimentControl.saveLog_EXPT();*/
 			
 			experimentControl.beginSession();
 			experimentControl.idx_Screen = 2;
@@ -147,6 +148,10 @@ void SliderSonificationFinalAudioProcessor::handleProceed()
 	case 8:
 		experimentControl.beginTrial();
 		experimentControl.idx_Screen = 5;
+		break;
+	case 9:
+		experimentControl.idx_Screen = 1;
+		break;
 	}
 
 	experimentControl.timeElapsed_presentScreen = 0;
