@@ -8724,7 +8724,7 @@ class mydsp : public dsp {
 		float fSlow279 = (fConst246 * fSlow74);
 		float fSlow280 = float(fHslider69);
 		int iSlow281 = (fSlow280 < 0.00100000005f);
-		float fSlow282 = (0.00100000005f * (iSlow281 ? 20000.0f : (10000.0f - (9800.0f * fSlow280))));
+		float fSlow282 = (0.00100000005f * (iSlow281 ? 20000.0f : (5000.0f - (4800.0f * fSlow280))));
 		float fSlow283 = std::min<float>(150.0f, std::max<float>(60.0f, float(fVslider1)));
 		float fSlow284 = std::min<float>(((0.0500000007f * (150.0f - fSlow283)) + 0.300000012f), 1.85000002f);
 		float fSlow285 = std::exp((fConst259 / fSlow284));

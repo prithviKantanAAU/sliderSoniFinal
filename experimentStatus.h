@@ -333,10 +333,9 @@ public:
 			{
 				block_Order[i][j] = getNewRandomIndex(block_Total, j, block_Order[i]);
 			}
-			/*block_Order[i][0] = 8;									/// To Test Strategies
-			session_Order[0] = 1;*/
+			block_Order[i][0] = 9;									// To Test Strategies
 		}
-		/*session_Order[0] = 0;*/
+		session_Order[0] = 1;
  	}
 
 	Random randGen;
@@ -389,7 +388,10 @@ public:
 
 			// STOP MUSIC IF SONG COMPLETE
 			if (sequencer.getSongProgress())
+			{
 				sequencer.stopMusic();
+				sequencer.togglePlayPause();
+			}
 		}
 	}
 
@@ -627,7 +629,7 @@ public:
 				// Block Header
 				data += "Block " + String(b + 1) + ",,,,";
 			}
-			
+
 			exptLogStore.save_Traj_LogLine(s, data);
 			data = "";
 
@@ -681,7 +683,7 @@ public:
 			// CLOSE FILE
 			fclose(exptLogStore.fileObj[s + 1]);
 		}
-
+	
 		
 	}
 };

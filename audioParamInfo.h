@@ -49,17 +49,17 @@ public:
 
 		// 8
 		audioParam_ObjectArray[7].set_nameTypeAddress("M_Synchronicity", 8, 1);
-		audioParam_ObjectArray[7].initializeSoniParams(0.6, 0, 1, 0, 0, 100, 0);
+		audioParam_ObjectArray[7].initializeSoniParams(0.25, 0, 1, 0, 0, 100, 0);
 		num_audioParams++;
 
 		// 9
 		audioParam_ObjectArray[8].set_nameTypeAddress("M_Harmonicity", 9, 1);
-		audioParam_ObjectArray[8].initializeSoniParams(0.9, 0, 1, 0, 0, 100, 0);
+		audioParam_ObjectArray[8].initializeSoniParams(1, 0, 1, 0, 0, 100, 0);
 		num_audioParams++;
 
 		// 10
 		audioParam_ObjectArray[9].set_nameTypeAddress("M_Brightness", 10, 1);
-		audioParam_ObjectArray[9].initializeSoniParams(0.75, 0, 1, 0, 0, 100, 0);
+		audioParam_ObjectArray[9].initializeSoniParams(0.5, 0, 1, 0, 0, 100, 0);
 		num_audioParams++;
 
 	}

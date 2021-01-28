@@ -79,7 +79,7 @@ public:
 			contribution_NC = fetchNewRandomPercent(ruleSet->noiseControl_Range);
 
 			percent_IncChange[i] += 
-				ruleSet->rules_k[4] * contribution_TR +
+				ruleSet->rules_k[4] * contribution_TR * 0 +
 				ruleSet->rules_k[5] * contribution_NC +
 				ruleSet->rules_k[6] * contribution_FU;
 		}
@@ -87,7 +87,7 @@ public:
 
 	double getNewTickIncrement(double ticks_Elapsed, double ticks_Total, double tickIncrement_Base)
 	{
-		float apMult = 1 * ap_forSkew_1D;
+		float apMult = 0.4 + 0.6 * ap_forSkew_1D;
 		if (fabs(ap_forSkew - 0.5) > 0.02)
 			apMult = (0.5 + ap_forSkew);
 

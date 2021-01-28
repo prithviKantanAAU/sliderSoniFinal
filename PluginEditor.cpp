@@ -311,8 +311,8 @@ void SliderSonificationFinalAudioProcessorEditor::toggleScreen(short newScreenId
 		welcomeText.setVisible(true);
 		break;
 	case 1:											// Personal Details Screen
-		participant_Name.setVisible(true);
-		participant_Name_Label.setVisible(true);
+		//participant_Name.setVisible(true);
+		//participant_Name_Label.setVisible(true);
 		participant_Age.setVisible(true);
 		participant_Age_Label.setVisible(true);
 		for (int i = 0; i < 4; i++) participant_Gender[i].setVisible(true);

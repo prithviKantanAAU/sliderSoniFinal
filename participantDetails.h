@@ -7,7 +7,7 @@ public:
 	ParticipantDetails() {};
 	~ParticipantDetails() {};
 
-	String name = "";
+	String name = "ANON";
 	String age = "";
 	String gender = "";
 	String hearingLoss = "";
